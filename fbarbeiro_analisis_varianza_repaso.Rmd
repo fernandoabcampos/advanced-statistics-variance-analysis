@@ -1,0 +1,41 @@
+---
+title: "Estadística Avanzada<br /><br /><u>Actividad 4</u><br /> <h2>Análisis de varianza y repaso del curso</h2><hr />"
+author: "Fernando Antonio Barbeiro Campos - fbarbeiro@uoc.edu"
+
+date: '`r format(Sys.Date(),"%e %B, %Y")`'
+output:
+  html_document:
+    toc: yes
+  pdf_document:
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 1. Preprocesado
+## 2. Intervalo de confianza
+## 3. Comparación de dos muestras: Fumadores vs No Fumadores
+## 4. ANOVA
+## 5. Comparaciones múltiples
+## 6. ANOVA multifactorial
+## 7. Aplicación de ANOVA a la investigación en minería de datos
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
