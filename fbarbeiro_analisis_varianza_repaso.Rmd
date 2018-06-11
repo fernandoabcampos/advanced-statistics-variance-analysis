@@ -1,8 +1,8 @@
 ---
-title: "Estadística Avanzada<br /><br /><u>Actividad 4</u><br /> <h2>Análisis de varianza y repaso del curso</h2><hr />"
+title: "Estadística Avanzada<br /><br /><u>Actividad 4</u><br /> <h2>Análisis de varianza y repaso del curso</h2>"
 author: "Fernando Antonio Barbeiro Campos - fbarbeiro@uoc.edu"
 
-date: '`r format(Sys.Date(),"%e %B, %Y")`'
+date: '`r format(Sys.Date(),"%e %B, %Y")`<hr />'
 output:
   html_document:
     toc: yes
@@ -14,7 +14,59 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r load_libraries, include=FALSE}
+library(knitr)
+```
+
+<hr />
+
 ## 1. Preprocesado
+###1.1. Carga de datos
+Cargar el fichero de datos “Fumadores.csv”.
+```{r}
+df <- read.csv("data/Fumadores.csv")
+head(df)
+```
+
+###1.2. Tipos de datos
+<p style="text-align: justify">Consultar los tipos de datos de las variables y si es necesario, aplicar las conversiones apropiadas. Averiguar posibles inconsistencias en los valores de Tipo o AE. En caso de que existan inconsitencias, corregidlas.
+</p>
+```{r}
+# Buscando por valores NA
+print(unlist(lapply(df, function(x) any(is.na(x)))))
+
+# Reunindo los tipos de variables e imprimindo
+res <- sapply(df, class)
+kable(data.frame(variables=names(res),clase=as.vector(res)))
+
+summary(df) # se nota (Other) en Tipo, deberíamos tener solo 6 categorías
+
+unique(df$Tipo) # Claramente el problema ha sido detectado - 2 letras minusculas
+df <- as.data.frame(sapply(df, toupper))
+# Aunque va enseñar solo 2 decimales, R mantiene el número como él era inicialmente
+df$AE <- as.numeric(as.character(df$AE))
+
+print(head(df$AE))
+str(df)
+```
+
+###1.3. Realizar un análisis descriptivo de la muestra en su totalidad en relación a la variable AE
+```{r}
+
+```
+
+###1.4. Analizar los datos según el tipo de fumador
+<p style="text-align: justify">
+Mostrar el número de personas en cada tipo de fumador, la media de AE de cada tipo de fumador y un gráfico que muestre esta media. Se recomienda ordenar el gráfico de menos a más AE.
+</p>
+<p style="text-align: justify">
+Luego, se debe representar un boxplot donde se muestre la distribución de AE por cada tipo. Para calcular la media o otras variables para cada tipo de fumador, podéis usar las funciones **summarize** y **group_by** de la libreria **dplyr** que os serán de gran utilidad. Para realizar la visualización de los datos, podéis usar la función **ggplot** de la librería **ggplot2**.
+</p>
+```{r}
+
+```
+<hr />
+
 ## 2. Intervalo de confianza
 ## 3. Comparación de dos muestras: Fumadores vs No Fumadores
 ## 4. ANOVA
