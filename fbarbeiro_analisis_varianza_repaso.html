@@ -137,7 +137,11 @@ Análisis de varianza y repaso del curso
 <li><a href="#analizar-los-datos-segun-el-tipo-de-fumador">1.4. Analizar los datos según el tipo de fumador</a></li>
 </ul></li>
 <li><a href="#intervalo-de-confianza">2. Intervalo de confianza</a></li>
-<li><a href="#comparacion-de-dos-muestras-fumadores-vs-no-fumadores">3. Comparación de dos muestras: Fumadores vs No Fumadores</a></li>
+<li><a href="#comparacion-de-dos-muestras-fumadores-vs-no-fumadores">3. Comparación de dos muestras: Fumadores vs No Fumadores</a><ul>
+<li><a href="#escribir-la-hipotesis-nula-y-alternativa">3.1. Escribir la hipótesis nula y alternativa</a></li>
+<li><a href="#preparar-los-datos-para-realizar-el-contraste">3.2. Preparar los datos para realizar el contraste</a></li>
+<li><a href="#especificar-que-tipo-de-contraste-usareis">3.3. Especificar qué tipo de contraste usaréis</a></li>
+</ul></li>
 <li><a href="#anova">4. ANOVA</a></li>
 <li><a href="#comparaciones-multiples">5. Comparaciones múltiples</a></li>
 <li><a href="#anova-multifactorial">6. ANOVA multifactorial</a></li>
@@ -328,6 +332,21 @@ confirm$conf.int</code></pre>
 </div>
 <div id="comparacion-de-dos-muestras-fumadores-vs-no-fumadores" class="section level2">
 <h2>3. Comparación de dos muestras: Fumadores vs No Fumadores</h2>
+<p style="text-align: justify">
+¿Podemos afirmar que la capacidad pulmonar de los fumadores es inferior a la de no fumadores? Incluid dentro de la categoría de no fumadores los fumadores pasivos. Realizar el cálculo manualmente sin usar las funciones <code>t.test</code> o equivalentes. Podéis usar <code>qnorm</code>, <code>qt</code>, <code>pnorm</code>, `pt, … Seguid los pasos que se indican a continuación.
+</p>
+<div id="escribir-la-hipotesis-nula-y-alternativa" class="section level3">
+<h3>3.1. Escribir la hipótesis nula y alternativa</h3>
+<p>Al escribir la hipótesis nula y alternativa, si se trata de comprobar si la capacidad pulmonar de los fumadores es inferior a la de no fumadores se debe plantear así:<br /> <strong>H<sub>0</sub> : μ Capac. Fumadores = μ Capac. No Fumadores</strong> <br /> <strong>H<sub>1</sub> : μ Capac. Fumadores &lt; μ Capac. No Fumadores</strong></p>
+<p>Es decir, se persigue rechazar la hipótesis nula. Al hacerlo, se hace a favor de la alternativa. H0 siempre es la hipótesis nula, y es la que se formula con la igualdad. (<em>Ester Bernadó Mansilla, orientaciones Tablero</em>)</p>
+</div>
+<div id="preparar-los-datos-para-realizar-el-contraste" class="section level3">
+<h3>3.2. Preparar los datos para realizar el contraste</h3>
+</div>
+<div id="especificar-que-tipo-de-contraste-usareis" class="section level3">
+<h3>3.3. Especificar qué tipo de contraste usaréis</h3>
+<p>Podéis consultar Gibergans Baguena (2009). ###3.4. Realizar los cálculos del valor p ###3.5. Interpretar el resultado del contraste</p>
+</div>
 </div>
 <div id="anova" class="section level2">
 <h2>4. ANOVA</h2>
