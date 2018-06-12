@@ -91,3 +91,25 @@ r2 %>%
   mean(AE) %>%
   ggplot(., aes(x=reorder(Tipo, -n), y=n)) +
   geom_bar(stat="identity")
+
+
+
+
+
+#########
+n <- length(df$AE)
+m <- mean(df$AE)
+
+conf.level <- 0.95
+z <- qt((1+conf.level)/2, df=n-1)
+se <- sd(df$AE)/sqrt(n)
+ci <- z * se
+
+range_min <- m - ci
+range_max <- m + ci
+
+print(paste("Intervalo de confianza: ", range_min, " hasta ", range_max))
+
+# Confirmando el valor
+confirm <- t.test(df$AE, mu=5.0, conf.level = conf.level)
+confirm$conf.int

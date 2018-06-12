@@ -89,9 +89,45 @@ bp + ggtitle("Distribución Aire Expulsado AE por Tipo de Fumador")
 <hr />
 
 ## 2. Intervalo de confianza
+<p style="text-align: justify">
+Calcular el intervalo de confianza de la capacidad pulmonar de toda la muestra. El nivel de confianza es 95 %. Realizar el cálculo manualmente sin usar las funciones t.test o equivalentes. Podéis usar qnorm, qt, pnorm, pt, . . . En cuanto a la elección del método para el cálculo del intervalo de confianza, debéis justificar vuestra elección.
+</p>
+```{r}
+n <- length(df$AE)
+m <- mean(df$AE)
+
+conf.level <- 0.95
+z <- qt((1+conf.level)/2, df=n-1)
+se <- sd(df$AE)/sqrt(n)
+ci <- z * se
+
+range_min <- m - ci
+range_max <- m + ci
+
+print(paste("Intervalo de confianza: ", range_min, " hasta ", range_max))
+
+# Confirmando el valor
+confirm <- t.test(df$AE, mu=5.0, conf.level = conf.level)
+confirm$conf.int
+```
+
+Para calcular el intervalo de confianza he utilizado una formula según Rumsey (2016) [1]:
+
+##### average +- z-score * standardError
+
+Con el uso de la formula de Rumsey (y también confirmado por `t.test`),  con 95% de confianza, la cantidad de aire expulsado (AE) está entre `r range_min` y `r range_max`, con base en el muestreo de datos.
+
+<hr />
 ## 3. Comparación de dos muestras: Fumadores vs No Fumadores
 ## 4. ANOVA
 ## 5. Comparaciones múltiples
 ## 6. ANOVA multifactorial
 ## 7. Aplicación de ANOVA a la investigación en minería de datos
 
+
+<hr>
+## Referencias
+<p style="text-align: justify">
+[1] Rumsey, D. (2016) *"How to calculate a confidence interval for a population mean when you know its standard deviation"*. [artículo en línea]. [Fecha de consulta: 06 de junio del 2018]. 
+http://www.dummies.com/education/math/statistics/how-to-calculate-a-confidence-interval-for-a-population-mean-when-you-know-its-standard-deviation/
+</p>
