@@ -2,6 +2,7 @@ library(knitr) # kable
 library(dplyr) # mutate / summarize / group_by
 library(plyr) # ddploy
 library(ggplot2) # ggplot
+library(scales) #percent
 
 
 df <- read.csv("data/Fumadores.csv")
@@ -21,19 +22,58 @@ kable(summary(df)[,1], # 1  - posicion AE
       digits=2, align='l', caption="Estadística descriptiva de la variable AE", col.names = "AE")
 
 
+category <-  as.data.frame(table(df$Tipo))
+category
+bp <- ggplot(df, aes(x="", y=category, fill=names(category)))
+bp + coord_polar(null, start=0)
 
-?summarise
-?summarize
-df %>% 
-  group_by(Tipo) %>% 
-  summarise(...)
+
+
+
+names(category)
+ggplot(category, aes(x = factor(1), y=Freq,fill=factor(Var1)) ) + geom_bar(width = 1,stat="identity")+coord_polar(theta = "y") +
+geom_text(aes(y = Freq/3 + c(0, cumsum(Freq)[-length(Freq)]), 
+              label = percent(Freq/100)), size=5)
+
+
+df <- as.data.frame(table(mpg$class))
+
+
+library(googleVis)
+op <- options(gvis.plot.tag = "chart")
+pie <- gvisPieChart(category, options = list(title = "Distribución por Tipo de Fumador", 
+                                                 width = 1000, height = 500))
+plot(pie)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 r2 <- setNames(aggregate(df[, c("AE")], list(df$Tipo), mean), c("Tipo", "Media"))
 r2 <- r2[order(r2$Media),]
 r2
 
+ggplot(r2, aes(x = reorder(Tipo, Media), y = Media), fill = Tipo) + 
+  geom_bar(stat = "identity")
+  #geom_point(aes(color = Tipo)) + xlab("Tipo de Fumadores") + 
+  ggtitle("Tipo de fumadores")
 
-ggplot(., aes(x=reorder(categorias, -n), y=n)) +
+bp <- ggplot(r2, aes(x= reorder(Tipo, Media), y=Media, fill=Tipo)) + geom_bar(stat="identity")
+
+bp + ggtitle("Tipo de fumadores")
+  
+  
+ggplot(r2, aes(x=reorder(categorias, -n), y=n)) +
   geom_bar(stat="identity")
 
 df %>%

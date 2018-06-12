@@ -65,24 +65,27 @@ Mostrar el número de personas en cada tipo de fumador, la media de AE de cada t
 Luego, se debe representar un boxplot donde se muestre la distribución de AE por cada tipo. Para calcular la media o otras variables para cada tipo de fumador, podéis usar las funciones **summarize** y **group_by** de la libreria **dplyr** que os serán de gran utilidad. Para realizar la visualización de los datos, podéis usar la función **ggplot** de la librería **ggplot2**.
 </p>
 ```{r}
-library(plotrix) 
-category <- table(df$Tipo)
-lbls <- paste(names(category), "\n", category, sep="")
-pie3D(category
-      , radius=0.9
-      , labelcex= 0.7
-      , labels = lbls
-      , explode=0.1
-      , main="Distibución por Tipo de Fumador"
-      , col = rainbow(length(lbls)
-      ))
+library(ggplot2) # ggplot
+category <-  as.data.frame(table(df$Tipo))
+category
+p <- ggplot(category, aes(x = '', y = Freq, fill = factor(Var1)) ) + geom_bar(width = 1,stat="identity") + coord_polar(theta = "y") +
+geom_text(aes(label = Freq), position = position_stack(vjust = 0.5)) + ggtitle("Distibución por Tipo de Fumador")
 
-library(plyr)
-r2 <- ddply(df, .(Tipo), summarize, 'Media'=mean(AE))
+p + labs(fill = "Tipo Fumador", x ="", y = "Frecuencia de ocurrencias")
+###### - distribucion ended ####################
+
+r2 <- setNames(aggregate(df[, c("AE")], list(df$Tipo), mean), c("Tipo", "Media"))
 r2 <- r2[order(r2$Media),]
 r2
-plot(r2)
+
+barp <- ggplot(r2, aes(x= reorder(Tipo, Media), y=Media, fill=Tipo, label = format(round(Media, 2), nsmall = 2))) + geom_bar(stat="identity")
+barp + ggtitle("Tipo de fumadores") + geom_text(size = 3, position = position_stack(vjust = 0.5))
+###### - media por tipo de fumador ended ####################
+
+bp <- ggplot(df, aes(x=Tipo, y=AE, fill=Tipo)) + geom_boxplot()
+bp + ggtitle("Distribución Aire Expulsado AE por Tipo de Fumador")
 ```
+<br />Se nota la existencia de *outliers* en FI y FM.
 <hr />
 
 ## 2. Intervalo de confianza
