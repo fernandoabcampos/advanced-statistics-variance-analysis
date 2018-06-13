@@ -193,6 +193,36 @@ A partir del valor crítico, también se llega a la misma observación, puesto q
 
 
 ## 4. ANOVA
+<p style="text-align: justify">
+A continuación se realizará un análisis de varianza, donde se desea comparar la capacidad pulmonar entre los seis tipos de fumadores/no fumadores clasificados previamente. El análisis de varianza consiste en evaluar si la variabilidad de una variable dependiente puede explicarse a partir de una o varias variables independientes, denominadas factores. En el caso que nos ocupa, nos interesa evaluar si la variabilidad de la variable AE puede explicarse por el factor tipo de fumador. Hay dos preguntas básicas a responder:
+</p>
+
++ ¿Existen diferencias entre la capacidad pulmonar (AE) entre los distintos tipos de fumadores/no fumadores?
++ Si existen diferencias, ¿entre qué grupos están estas diferencias?
+
+<p style="text-align: justify">
+Para la resolución de esta sección, se seguirán los apuntes de López-Roldán y Fachelli (2015).
+</p>
+
+###4.1. Verificar la asunción de normalidad
+<p style="text-align: justify">
+Atendiendo al material, gráfico III. 8.6 y página 25, evaluar si el conjunto de datos cumple las condiciones de aplicación de ANOVA. Seguid los pasos que se indican a continuación.
+</p>
+
+####4.1.1. Representar gráficamente la normalidad de la muestra de datos AE con la función qqnorm
+```{r}
+qqnorm(df$AE)
+qqline(df$AE)
+#bartlett.test(AE)
+```
+
+####4.1.2. Escribir la hipótesis nula e hipótesis alternativa
+####4.1.3. Aplicar un test de normalidad
+<p style="text-align: justify">
+Aplicar un test de normalidad, siguiendo las recomendaciones del material mencionado López-Roldán y Fachelli (2015). Justificar la elección.
+</p>
+####4.1.4. Interpretar los resultados a partir del gráfico qqnorm y de los valores que devuelve el test.
+
 ## 5. Comparaciones múltiples
 ## 6. ANOVA multifactorial
 ## 7. Aplicación de ANOVA a la investigación en minería de datos
