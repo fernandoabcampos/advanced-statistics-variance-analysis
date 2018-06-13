@@ -120,14 +120,14 @@ Con el uso de la formula de Rumsey (y también confirmado por `t.test`),  con 95
 <hr />
 ## 3. Comparación de dos muestras: Fumadores vs No Fumadores
 <p style="text-align: justify">
-¿Podemos afirmar que la capacidad pulmonar de los fumadores es inferior a la de no fumadores? Incluid dentro de la categoría de no fumadores los fumadores pasivos. Realizar el cálculo manualmente sin usar las funciones `t.test` o equivalentes. Podéis usar `qnorm`, `qt`, `pnorm`, `pt, ... Seguid los pasos que se indican a continuación.
+¿Podemos afirmar que la capacidad pulmonar de los fumadores es inferior a la de no fumadores? Incluid dentro de la categoría de no fumadores los fumadores pasivos. Realizar el cálculo manualmente sin usar las funciones `t.test` o equivalentes. Podéis usar `qnorm`, `qt`, `pnorm`, `pt` ... Seguid los pasos que se indican a continuación.
 </p>
 ###3.1. Escribir la hipótesis nula y alternativa
 Al escribir la hipótesis nula y alternativa, si se trata de comprobar si la capacidad pulmonar de los fumadores es inferior a la de no fumadores se debe plantear así:<br />
 <br />
-**H<sub>0</sub> : &mu; Capac. Fumadores =  &mu; Capac. No Fumadores**
+**H *<sub>0</sub> : &mu; <sub>Capac. Fumadores</sub>* =  *&mu; <sub>Capac. No Fumadores</sub>* **
 <br />
-**H<sub>1</sub> : &mu; Capac. Fumadores <  &mu; Capac. No Fumadores**
+**H *<sub>1</sub> : &mu; <sub>Capac. Fumadores</sub>* <  *&mu; <sub>Capac. No Fumadores</sub>* **
 <br />
 <br />
 <p style="text-align: justify">
@@ -144,13 +144,53 @@ head(no_fumadores)
 tail(no_fumadores)
 head(fumadores)
 tail(fumadores)
-sum(nrow(no_fumadores), nrow(fumadores))
+
+n1 <- length( no_fumadores$AE)
+n2 <- length( fumadores$AE)
+n1
+n2
+
+s1 <- sd( no_fumadores$AE )
+s2 <-sd ( fumadores$AE )
+s1
+s2
 ```
 
 ###3.3. Especificar qué tipo de contraste usaréis
-Podéis consultar Gibergans Baguena (2009).
+*Podéis consultar Gibergans Baguena (2009).*
+
+<p style="text-align: justify">
+Se trata de un **contraste unilateral**, conforme indicado por Baguena (2009) [2], este tipo de contraste es un **contraste de dos muestras sobre la diferencia de medias**.
+<p style="text-align: justify">
+
 ###3.4. Realizar los cálculos del valor p
+```{r}
+mean1 <- mean( no_fumadores$AE )
+mean2 <- mean( fumadores$AE )
+mean1
+mean2
+
+S <- sqrt( s1^2/n1 + s2^2/n2)
+zobs <- (mean1-mean2)/ S
+zobs
+
+alfa <- 1-0.95
+zcritical <- qnorm( alfa, lower.tail=FALSE )
+zcritical
+
+pvalue <- pnorm( abs(zobs), lower.tail=FALSE )
+pvalue
+```
+
+
+
 ###3.5. Interpretar el resultado del contraste
+<p style="text-align: justify">
+Observando pvalue = `r pvalue` < &alpha;=`r alfa`, rechazamos la hipótesis nula *Capacidad Pulmonar Fumadores = Capacidad Pulmonar No Fumadores* a favor de la hipótesis alternativa.
+</p>
+
+A partir del valor crítico, también se llega a la misma observación, puesto que el valor observado `r zobs` > `r zcritical`.
+
 
 ## 4. ANOVA
 ## 5. Comparaciones múltiples
@@ -163,4 +203,8 @@ Podéis consultar Gibergans Baguena (2009).
 <p style="text-align: justify">
 [1] Rumsey, D. (2016) *"How to calculate a confidence interval for a population mean when you know its standard deviation"*. [artículo en línea]. [Fecha de consulta: 06 de junio del 2018]. 
 http://www.dummies.com/education/math/statistics/how-to-calculate-a-confidence-interval-for-a-population-mean-when-you-know-its-standard-deviation/
+</p>
+<br />
+<p style="text-align: justify">
+[2] Baguena, J. (2009) *“Contraste de Dos Muestras.”* In Estadística, edited by Josep Gibergans Baguena, Angel J. Gil Estallo, and Carles Rovira Escofet. Barcelona: FUOC.
 </p>

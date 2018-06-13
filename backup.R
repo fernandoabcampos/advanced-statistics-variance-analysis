@@ -124,4 +124,38 @@ tail(no_fumadores)
 head(fumadores)
 tail(fumadores)
 sum(nrow(no_fumadores), nrow(fumadores))
+dif<- no_fumadores$AE - fumadores$AE
 r2
+
+
+
+
+
+
+
+
+z.test <- function( x, mu, pop.sd=NULL, cl=0.95 ){    #z test
+  n<-length(x)
+  mean.x <- mean(x)
+  sd<-pop.sd
+  if (is.null(pop.sd)) sd<-sd( x )  #estimamos la desv de la población a partir de la muestra.
+  z.obs<- (mean.x - mu) / (sd/sqrt(n))   #z follows a normal distribution N(0,1)
+  
+  alfa <- 1-cl
+  z.critical.one.tail <- qnorm( alfa, lower.tail=FALSE )
+  z.critical.two.tail <- qnorm( alfa/2, lower.tail=FALSE  )
+  one.tail.p_value <- pnorm( abs(z.obs), lower.tail=FALSE )
+  two.tail.p_value <- one.tail.p_value * 2
+  cat ("sample mean=", mean.x, "   sd=", sd, "  sample length=", n, "\n",
+       "z obs= ", z.obs, "\n",
+       "z critical one-tailed: ", z.critical.one.tail, "\n",
+       "z critical two-tailed: ", z.critical.two.tail, "\n",
+       "one-tailed probability", one.tail.p_value, "\n",
+       "two-tailed probability", two.tail.p_value)
+  
+  #Guardamos los datos en una lista
+  mylist <-list( mean=mean.x, sd=sd, n=n, zobs=z.obs, 
+                 one.tailed= c(z.critical.one.tail, one.tail.p_value),
+                 two.tailed=c(z.critical.two.tail, two.tail.p_value ))
+  return (mylist)
+}
