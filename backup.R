@@ -113,3 +113,9 @@ print(paste("Intervalo de confianza: ", range_min, " hasta ", range_max))
 # Confirmando el valor
 confirm <- t.test(df$AE, mu=5.0, conf.level = conf.level)
 confirm$conf.int
+
+###
+
+colnames(df)
+no_fumadores <- df[(df$Tipo =="NF" || df$Tipo == "FI"),] # NF - No Fumadores / FP - Fumadores pasivos
+r2

@@ -124,13 +124,15 @@ Con el uso de la formula de Rumsey (y también confirmado por `t.test`),  con 95
 </p>
 ###3.1. Escribir la hipótesis nula y alternativa
 Al escribir la hipótesis nula y alternativa, si se trata de comprobar si la capacidad pulmonar de los fumadores es inferior a la de no fumadores se debe plantear así:<br />
+<br />
 **H<sub>0</sub> : &mu; Capac. Fumadores =  &mu; Capac. No Fumadores**
 <br />
 **H<sub>1</sub> : &mu; Capac. Fumadores <  &mu; Capac. No Fumadores**
-
+<br />
+<br />
+<p style="text-align: justify">
 Es decir, se persigue rechazar la hipótesis nula. Al hacerlo, se hace a favor de la alternativa. H0 siempre es la hipótesis nula, y es la que se formula con la igualdad. (*Ester Bernadó Mansilla, orientaciones Tablero*)
-
-
+</p>
 
 ###3.2. Preparar los datos para realizar el contraste
 ###3.3. Especificar qué tipo de contraste usaréis
