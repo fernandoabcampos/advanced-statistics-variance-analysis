@@ -117,5 +117,11 @@ confirm$conf.int
 ###
 
 colnames(df)
-no_fumadores <- df[(df$Tipo =="NF" || df$Tipo == "FI"),] # NF - No Fumadores / FP - Fumadores pasivos
+no_fumadores <- df[(df$Tipo =="NF" | df$Tipo == "FI"),] # NF - No Fumadores / FP - Fumadores pasivos
+fumadores <- df[(df$Tipo !="NF" & df$Tipo != "FI"),] 
+head(no_fumadores)
+tail(no_fumadores)
+head(fumadores)
+tail(fumadores)
+sum(nrow(no_fumadores), nrow(fumadores))
 r2

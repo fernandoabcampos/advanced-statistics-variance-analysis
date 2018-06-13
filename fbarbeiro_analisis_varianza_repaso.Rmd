@@ -135,6 +135,18 @@ Es decir, se persigue rechazar la hipótesis nula. Al hacerlo, se hace a favor d
 </p>
 
 ###3.2. Preparar los datos para realizar el contraste
+Creando dos data frames que contengan por separado los no fumadores y por otra parte, los fumadores.
+```{r}
+nrow(df)
+no_fumadores <- subset(df, df$Tipo =="NF" | df$Tipo == "FI") # NF - No Fumadores / FP - Fumadores pasivos
+fumadores <- subset(df, df$Tipo !="NF" & df$Tipo != "FI")
+head(no_fumadores)
+tail(no_fumadores)
+head(fumadores)
+tail(fumadores)
+sum(nrow(no_fumadores), nrow(fumadores))
+```
+
 ###3.3. Especificar qué tipo de contraste usaréis
 Podéis consultar Gibergans Baguena (2009).
 ###3.4. Realizar los cálculos del valor p
