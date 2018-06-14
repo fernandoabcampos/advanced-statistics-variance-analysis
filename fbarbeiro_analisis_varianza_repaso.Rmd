@@ -278,9 +278,9 @@ La justificativa de mí elección ha sido porque individualmente los conjuntos d
 <br />
 
 ####4.1.4. Interpretar los resultados a partir del gráfico qqnorm y de los valores que devuelve el test.
-Tomando el valor de significación &alpha;= `r alfa`.
-
-
+<p style="text-align: justify">
+Tomando el valor de significación &alpha;= `r alfa` y su comparación con los valores de p-value de los resultados del apartado anterior, podríamos definir que se trata de muestreos de distribución normal. Lo mismo puede ser encontrado si miramos en los gráficos donde también se puede observar la tendencia de seguir la línea trazada por `qqline`.
+</p>
 
 ## 5. Comparaciones múltiples
 ## 6. ANOVA multifactorial
