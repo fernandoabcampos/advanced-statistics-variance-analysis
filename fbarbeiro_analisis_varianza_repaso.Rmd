@@ -281,8 +281,68 @@ La justificativa de mí elección ha sido porque individualmente los conjuntos d
 <p style="text-align: justify">
 Tomando el valor de significación &alpha;= `r alfa` y su comparación con los valores de p-value de los resultados del apartado anterior, podríamos definir que se trata de muestreos de distribución normal. Lo mismo puede ser encontrado si miramos en los gráficos donde también se puede observar la tendencia de seguir la línea trazada por `qqline`.
 </p>
+<br />
+
+### 4.2. Homoscedasticidad: Homogeneidad de varianzas
+
+<p style="text-align: justify">
+Otra de las condiciones de aplicación de ANOVA es la igualdad de varianzas (homoscedasticidad). Aplicar un test para validar si los grupos presentan igual varianza. Seguid las indicaciones de los apuntes de López-Roldán y Fachelli (2015).
+</p>
+<br />
+
+####4.2.1. Escribir hipótesis nula y alternativa
+
+<br />
+**H *<sub>0</sub> : Las varianzas poblacionales son iguales (homoscedasticidad) $\sigma_{1}^2$ = $\sigma_{2}^2$ * **
+<br />
+**H *<sub>1</sub> : Las varianzas poblacionales son distintas (heteroscedasticidad) $\sigma_{1}^2$ $\neq$ $\sigma_{2}^2$ * **
+<br />
+<br />
+
+####4.2.2. Realizar los cálculos
+####4.2.3. Interpretar los resultados
+
+
+###4.3. ANOVA unifactorial (One Way ANOVA)
+Calcular ANOVA de un factor (one-way ANOVA o independent samples ANOVA) para investigar si existen diferencias en el nivel de aire expulsado (AE) entre los distintos tipos de fumadores.
+
+
+####4.3.1. Escribir la hipótesis nula y alternativa
+####4.3.2. Realizar los cálculos
+Podéis usar la función **aov.**
+
+####4.3.3. Interpretar los resultados de la prueba ANOVA y relacionarlos con el resultado gráfico del boxplot
+
+###4.4. Cálculos ANOVA
+####4.4.1. Identificar las variables
+<p style="text-align: justify">
+A partir de los resultados del modelo devuelto por aov, identificar las variables SST (Total Sum of Squares), SSW (Within Sum of Squares), SSB (Between Sum of Squares) y los grados de libertad. A partir de estos valores, calcular manualmente el valor F, el valor crítico (a un nivel de confianza del 95%), y el valor p.Interpretar los resultados.
+</p>
+
+####4.4.2. Calcular manualmente las variables
+<p style="text-align: justify">
+Calcular manualmente SSB, SSW y SST a partir de los datos de la muestra. Comprobad que el cálculo coincide con los valores que devuelve la función anova. Las funciones summarize y group_by os pueden ser útiles para simplificar los cálculos.
+</p>
+
+###4.5. Calcular la fuerza de la relación e interpretar el resultado
+Podéis consultar López-Roldán y Fachelli (2015), p.37.
 
 ## 5. Comparaciones múltiples
+<p style="text-align: justify">
+Independientemente del resultado obtenido en el apartado anterior, realizamos un test de comparación múltiple entre los grupos. Este test se aplica cuando el test ANOVA devuelve rechazar la hipótesis nula de igualdad de medias. Por tanto, procederemos como si el test ANOVA hubiera dado como resultado el rechazo de la hipótesis nula.
+</p>
+
+###5.1. Sin corrección
+Calcular las comparaciones entre grupos sin ningún tipo de corrección. Podéis usar la función pairwise.t.test.
+
+###5.2. Corrección de Bonferroni
+Aplicar la corrección de Bonferroni en la comparación múltiple. Interpretar el resultado y contrastar el resultado con el obtenido sin corrección.
+
+###5.3. Prueba de Scheffé
+<p style="text-align: justify">
+La prueba de Scheffé es una de las más usadas cuando se cumplen condiciones de igualdad de varianza. Según López, está basada en la distribución F. Permite la comparación binaria entre pares de medias y también la comparación múltiple. En las comparaciones de pares es conservadora. Se puede aplicar con muestras de tamaño desigual y es bastante robusta ante el incumplimiento de la condición de homoscedasticidad.
+</p>
+Aplicad la prueba de Scheffé e interpretar el resultado.
 ## 6. ANOVA multifactorial
 ## 7. Aplicación de ANOVA a la investigación en minería de datos
 
