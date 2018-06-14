@@ -159,3 +159,16 @@ z.test <- function( x, mu, pop.sd=NULL, cl=0.95 ){    #z test
                  two.tailed=c(z.critical.two.tail, two.tail.p_value ))
   return (mylist)
 }
+
+
+
+unique(df$Tipo)
+
+NF <- df[df$Tipo == "NF", c("AE")]
+FP <- df[df$Tipo == "FP", c("AE")]
+NI <- df[df$Tipo == "NI", c("AE")]
+FL <- df[df$Tipo == "FL", c("AE")] 
+FM <- df[df$Tipo == "FM", c("AE")] 
+FI <- df[df$Tipo == "FI", c("AE")]
+sum(length(NF), length(FP), length(NI), length(FL), length(FM),length(FI))
+

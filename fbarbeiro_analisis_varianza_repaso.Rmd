@@ -211,16 +211,56 @@ Atendiendo al material, gráfico III. 8.6 y página 25, evaluar si el conjunto d
 
 ####4.1.1. Representar gráficamente la normalidad de la muestra de datos AE con la función qqnorm
 ```{r}
-qqnorm(df$AE)
+NF <- df[df$Tipo == "NF", c("AE")]
+FP <- df[df$Tipo == "FP", c("AE")]
+NI <- df[df$Tipo == "NI", c("AE")]
+FL <- df[df$Tipo == "FL", c("AE")] 
+FM <- df[df$Tipo == "FM", c("AE")] 
+FI <- df[df$Tipo == "FI", c("AE")]
+sum(length(NF), length(FP), length(NI), length(FL), length(FM),length(FI))
+
+qqnorm(df$AE, main = "Todas las categorías (fumadores o no)")
 qqline(df$AE)
-#bartlett.test(AE)
+par( mfrow=c(1,2))
+qqnorm(NF, main = "No fumadores")
+qqline(NF)
+qqnorm(FP, main = "Fumadores pasivos")
+qqline(FP)
+qqnorm(NI, main = "Fum. No inhalan")
+qqline(NI)
+qqnorm(FL, main = "Fum. light")
+qqline(FL)
+qqnorm(FM, main = "Fum. moderado")
+qqline(FM)
+qqnorm(FI, main = "Fum. intensivos")
+qqline(FI)
+par( mfrow=c(1,1))
+
 ```
 
 ####4.1.2. Escribir la hipótesis nula e hipótesis alternativa
+
+<br />
+**H *<sub>0</sub> : &mu; <sub>Capac. Fumadores</sub>* =  *&mu; <sub>Capac. No Fumadores</sub>* **
+<br />
+**H *<sub>1</sub> : &mu; <sub>Capac. Fumadores</sub>* <  *&mu; <sub>Capac. No Fumadores</sub>* **
+<br />
+<br />
+<p style="text-align: justify">
+Es decir, se persigue rechazar la hipótesis nula. Al hacerlo, se hace a favor de la alternativa. H0 siempre es la hipótesis nula, y es la que se formula con la igualdad. (*Ester Bernadó Mansilla, orientaciones Tablero*)
+</p>
+
+
+
 ####4.1.3. Aplicar un test de normalidad
 <p style="text-align: justify">
 Aplicar un test de normalidad, siguiendo las recomendaciones del material mencionado López-Roldán y Fachelli (2015). Justificar la elección.
 </p>
+```{r}
+#bartlett.test(AE)
+```
+
+
 ####4.1.4. Interpretar los resultados a partir del gráfico qqnorm y de los valores que devuelve el test.
 
 ## 5. Comparaciones múltiples
