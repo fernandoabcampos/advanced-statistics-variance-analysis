@@ -9,7 +9,8 @@ df <- read.csv("data/Fumadores.csv")
 head(df)
 
 print(unlist(lapply(df, function(x) any(is.na(x)))))
-res <- sapply(df, class)kable(data.frame(variables=names(res),clase=as.vector(res)))
+res <- sapply(df, class)
+kable(data.frame(variables=names(res),clase=as.vector(res)))
 
 summary(df) # se nota (Other) en Tipo, deberíamos tener solo 6 categorías
 
@@ -171,4 +172,19 @@ FL <- df[df$Tipo == "FL", c("AE")]
 FM <- df[df$Tipo == "FM", c("AE")] 
 FI <- df[df$Tipo == "FI", c("AE")]
 sum(length(NF), length(FP), length(NI), length(FL), length(FM),length(FI))
+
+shapiro.test(df$AE)
+sNF <- shapiro.test(NF)
+sFP <- shapiro.test(FP)
+sNI <- shapiro.test(NI)
+sFL <- shapiro.test(FL)
+sFM <- shapiro.test(FM)
+sFI <- shapiro.test(FI)
+
+
+
+alpha <- 0.05
+sNF <- shapiro.test(NF)
+sNF$p.value > alpha
+
 

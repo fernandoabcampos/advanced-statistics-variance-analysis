@@ -241,27 +241,46 @@ par( mfrow=c(1,1))
 ####4.1.2. Escribir la hipótesis nula e hipótesis alternativa
 
 <br />
-**H *<sub>0</sub> : &mu; <sub>Capac. Fumadores</sub>* =  *&mu; <sub>Capac. No Fumadores</sub>* **
+**H *<sub>0</sub> : La distribución es normal* **
 <br />
-**H *<sub>1</sub> : &mu; <sub>Capac. Fumadores</sub>* <  *&mu; <sub>Capac. No Fumadores</sub>* **
+**H *<sub>1</sub> : La distribución no es normal* **
 <br />
 <br />
 <p style="text-align: justify">
-Es decir, se persigue rechazar la hipótesis nula. Al hacerlo, se hace a favor de la alternativa. H0 siempre es la hipótesis nula, y es la que se formula con la igualdad. (*Ester Bernadó Mansilla, orientaciones Tablero*)
+Según López-Roldán y Fachelli (2015) [3], para determinar la **condición de normalidad** se aplica una prueba estadística que la determina como la prueba de *Kolmogorov-Smirnov*, u otras como las de *Lilliefors*, *Anderson-Darling* o *Shapiro-Wilk*.
 </p>
-
-
 
 ####4.1.3. Aplicar un test de normalidad
 <p style="text-align: justify">
-Aplicar un test de normalidad, siguiendo las recomendaciones del material mencionado López-Roldán y Fachelli (2015). Justificar la elección.
+*Aplicar un test de normalidad, siguiendo las recomendaciones del material mencionado López-Roldán y Fachelli (2015). Justificar la elección.*
 </p>
 ```{r}
-#bartlett.test(AE)
-```
+test_and_define_if_normal <- function(x) {
+  sr <- shapiro.test(x)
+  
+  #valor de significación = alpha <- 0.05
+  print(paste(ifelse(sr$p.value >= alfa, "Distribución Normal", "Distribución no normal"), "- p-value: ", sr$p.value))
+}
 
+
+# Son solamente 6 atributos, si fueran mas estableceria un algoritmo, por ejemplo para aplicar todo de golpe con lappy en un dataset
+test_and_define_if_normal(NF)
+test_and_define_if_normal(FP)
+test_and_define_if_normal(NI)
+test_and_define_if_normal(FL)
+test_and_define_if_normal(FM)
+test_and_define_if_normal(FI)
+
+```
+<p style="text-align: justify">
+La justificativa de mí elección ha sido porque individualmente los conjuntos de datos son de menos de 30 ítems y, aún seguiendo a López-Roldán y Fachelli (2015) [3] si n≤30 se tiene que verificar con la prueba estadística de normalidad de *Shapiro-Wilk*.
+</p>
+<br />
 
 ####4.1.4. Interpretar los resultados a partir del gráfico qqnorm y de los valores que devuelve el test.
+Tomando el valor de significación &alpha;= `r alfa`.
+
+
 
 ## 5. Comparaciones múltiples
 ## 6. ANOVA multifactorial
@@ -277,4 +296,9 @@ http://www.dummies.com/education/math/statistics/how-to-calculate-a-confidence-i
 <br />
 <p style="text-align: justify">
 [2] Baguena, J. (2009) *“Contraste de Dos Muestras.”* In Estadística, edited by Josep Gibergans Baguena, Angel J. Gil Estallo, and Carles Rovira Escofet. Barcelona: FUOC.
+</p>
+<br />
+<p style="text-align: justify">
+[3] López-Roldán, P. y Fachelli, S. (2015) *"Metodología de la Investigación Social Cuantitativa"* 1ª edición, Barcelona: Universitat Autònoma de Barcelona. [artículo en línea]. [Fecha de consulta: 10 de junio del 2018].
+https://ddd.uab.cat/pub/caplli/2016/163568/metinvsoccua_cap3-8a2016.pdf
 </p>

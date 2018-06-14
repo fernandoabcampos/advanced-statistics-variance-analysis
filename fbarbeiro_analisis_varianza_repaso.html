@@ -483,20 +483,45 @@ qqline(FI)</code></pre>
 </div>
 <div id="escribir-la-hipotesis-nula-e-hipotesis-alternativa" class="section level4">
 <h4>4.1.2. Escribir la hipótesis nula e hipótesis alternativa</h4>
-<br /> <strong>H <em><sub>0</sub> : μ <sub>Capac. Fumadores</sub></em> = <em>μ <sub>Capac. No Fumadores</sub></em> </strong> <br /> <strong>H <em><sub>1</sub> : μ <sub>Capac. Fumadores</sub></em> &lt; <em>μ <sub>Capac. No Fumadores</sub></em> </strong> <br /> <br />
+<br /> <strong>H <em><sub>0</sub> : La distribución es normal</em> </strong> <br /> <strong>H <em><sub>1</sub> : La distribución no es normal</em> </strong> <br /> <br />
 <p style="text-align: justify">
-Es decir, se persigue rechazar la hipótesis nula. Al hacerlo, se hace a favor de la alternativa. H0 siempre es la hipótesis nula, y es la que se formula con la igualdad. (<em>Ester Bernadó Mansilla, orientaciones Tablero</em>)
+Según López-Roldán y Fachelli (2015) [3], para determinar la <strong>condición de normalidad</strong> se aplica una prueba estadística que la determina como la prueba de <em>Kolmogorov-Smirnov</em>, u otras como las de <em>Lilliefors</em>, <em>Anderson-Darling</em> o <em>Shapiro-Wilk</em>.
 </p>
 </div>
 <div id="aplicar-un-test-de-normalidad" class="section level4">
 <h4>4.1.3. Aplicar un test de normalidad</h4>
 <p style="text-align: justify">
-Aplicar un test de normalidad, siguiendo las recomendaciones del material mencionado López-Roldán y Fachelli (2015). Justificar la elección.
+<em>Aplicar un test de normalidad, siguiendo las recomendaciones del material mencionado López-Roldán y Fachelli (2015). Justificar la elección.</em>
 </p>
-<pre class="r"><code>#bartlett.test(AE)</code></pre>
+<pre class="r"><code>test_and_define_if_normal &lt;- function(x) {
+  sr &lt;- shapiro.test(x)
+  
+  #valor de significación = alpha &lt;- 0.05
+  print(paste(ifelse(sr$p.value &gt;= alfa, &quot;Distribución Normal&quot;, &quot;Distribución no normal&quot;), &quot;- p-value: &quot;, sr$p.value))
+}
+
+
+# Son solamente 6 atributos, si fueran mas estableceria un algoritmo, por ejemplo para aplicar todo de golpe con lappy en un dataset
+test_and_define_if_normal(NF)</code></pre>
+<pre><code>## [1] &quot;Distribución Normal - p-value:  0.070612071217006&quot;</code></pre>
+<pre class="r"><code>test_and_define_if_normal(FP)</code></pre>
+<pre><code>## [1] &quot;Distribución Normal - p-value:  0.875683996959829&quot;</code></pre>
+<pre class="r"><code>test_and_define_if_normal(NI)</code></pre>
+<pre><code>## [1] &quot;Distribución Normal - p-value:  0.157819847904823&quot;</code></pre>
+<pre class="r"><code>test_and_define_if_normal(FL)</code></pre>
+<pre><code>## [1] &quot;Distribución Normal - p-value:  0.803612711400276&quot;</code></pre>
+<pre class="r"><code>test_and_define_if_normal(FM)</code></pre>
+<pre><code>## [1] &quot;Distribución Normal - p-value:  0.793198135620242&quot;</code></pre>
+<pre class="r"><code>test_and_define_if_normal(FI)</code></pre>
+<pre><code>## [1] &quot;Distribución Normal - p-value:  0.254249135275093&quot;</code></pre>
+<p style="text-align: justify">
+La justificativa de mí elección ha sido porque individualmente los conjuntos de datos son de menos de 30 ítems y, aún seguiendo a López-Roldán y Fachelli (2015) [3] si n≤30 se tiene que verificar con la prueba estadística de normalidad de <em>Shapiro-Wilk</em>.
+</p>
+<p><br /></p>
 </div>
 <div id="interpretar-los-resultados-a-partir-del-grafico-qqnorm-y-de-los-valores-que-devuelve-el-test." class="section level4">
 <h4>4.1.4. Interpretar los resultados a partir del gráfico qqnorm y de los valores que devuelve el test.</h4>
+<p>Tomando el valor de significación α= 0.05.</p>
 </div>
 </div>
 </div>
@@ -518,6 +543,10 @@ Aplicar un test de normalidad, siguiendo las recomendaciones del material mencio
 <br />
 <p style="text-align: justify">
 [2] Baguena, J. (2009) <em>“Contraste de Dos Muestras.”</em> In Estadística, edited by Josep Gibergans Baguena, Angel J. Gil Estallo, and Carles Rovira Escofet. Barcelona: FUOC.
+</p>
+<br />
+<p style="text-align: justify">
+[3] López-Roldán, P. y Fachelli, S. (2015) <em>“Metodología de la Investigación Social Cuantitativa”</em> 1ª edición, Barcelona: Universitat Autònoma de Barcelona. [artículo en línea]. [Fecha de consulta: 10 de junio del 2018]. <a href="https://ddd.uab.cat/pub/caplli/2016/163568/metinvsoccua_cap3-8a2016.pdf" class="uri">https://ddd.uab.cat/pub/caplli/2016/163568/metinvsoccua_cap3-8a2016.pdf</a>
 </p>
 </div>
 
