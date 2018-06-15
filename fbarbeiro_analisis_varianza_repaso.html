@@ -594,7 +594,18 @@ ANOVA unifactorial compara las medias entre los grupos que nos interesan y deter
 <h4>4.3.2. Realizar los cálculos</h4>
 <p>Podéis usar la función <strong>aov.</strong></p>
 <pre class="r"><code>anova &lt;- aov(df$AE~df$Tipo, df)
-summary(anova)</code></pre>
+anova</code></pre>
+<pre><code>## Call:
+##    aov(formula = df$AE ~ df$Tipo, data = df)
+## 
+## Terms:
+##                  df$Tipo Residuals
+## Sum of Squares  38.58845  50.82225
+## Deg. of Freedom        5       113
+## 
+## Residual standard error: 0.6706373
+## Estimated effects may be unbalanced</code></pre>
+<pre class="r"><code>summary(anova)</code></pre>
 <pre><code>##              Df Sum Sq Mean Sq F value   Pr(&gt;F)    
 ## df$Tipo       5  38.59   7.718   17.16 1.33e-12 ***
 ## Residuals   113  50.82   0.450                     
@@ -639,14 +650,44 @@ Utilizamos también un TukeyHSD para realizar múltiples <em>pairwise-comparison
 <div id="identificar-las-variables" class="section level4">
 <h4>4.4.1. Identificar las variables</h4>
 <p style="text-align: justify">
-A partir de los resultados del modelo devuelto por aov, identificar las variables SST (Total Sum of Squares), SSW (Within Sum of Squares), SSB (Between Sum of Squares) y los grados de libertad. A partir de estos valores, calcular manualmente el valor F, el valor crítico (a un nivel de confianza del 95%), y el valor p.Interpretar los resultados.
+A partir de los resultados del modelo devuelto por <code>aov</code>, identificar las variables SST (Total Sum of Squares), SSW (Within Sum of Squares), SSB (Between Sum of Squares) y los grados de libertad. A partir de estos valores, calcular manualmente el valor F, el valor crítico (a un nivel de confianza del 95%), y el valor p.Interpretar los resultados.
 </p>
+<pre class="r"><code>sumSq &lt;- summary(anova)[[1]]$'Sum Sq'
+
+#Manera 1
+print(paste(&quot;SSW (Within Sum of Squares)&quot;,sumSq[2]))</code></pre>
+<pre><code>## [1] &quot;SSW (Within Sum of Squares) 50.8222519546478&quot;</code></pre>
+<pre class="r"><code>#Manera 2
+SSW.aov &lt;- sum( anova$residuals ^ 2 )
+SSW.aov</code></pre>
+<pre><code>## [1] 50.82225</code></pre>
+<pre class="r"><code>#Cálculo SST: varianza total (valor contiene todos los valores de x1-x5)
+#SST &lt;- sum( (valor - mean(valor)) ^ 2 )
+
+#SSB: Varianza entre grupos
+#SSB &lt;- SST - SSW
+#SST</code></pre>
 </div>
 <div id="calcular-manualmente-las-variables" class="section level4">
 <h4>4.4.2. Calcular manualmente las variables</h4>
 <p style="text-align: justify">
 Calcular manualmente SSB, SSW y SST a partir de los datos de la muestra. Comprobad que el cálculo coincide con los valores que devuelve la función anova. Las funciones summarize y group_by os pueden ser útiles para simplificar los cálculos.
 </p>
+<pre class="r"><code>varNF &lt;- sum ((NF - mean(NF)) ^ 2 )
+varFP &lt;- sum ((FP - mean(FP)) ^ 2 )
+varNI &lt;- sum ((NI - mean(NI)) ^ 2 )
+varFL &lt;- sum ((FL - mean(FL)) ^ 2 )
+varFM &lt;- sum ((FM - mean(FM)) ^ 2 )
+varFI &lt;- sum ((FI - mean(FI)) ^ 2 )
+
+#SSW (Within Sum of Squares): varianza intra grupo
+SSW &lt;- varNF + varFP + varNI + varFL + varFM + varFI
+SSW</code></pre>
+<pre><code>## [1] 50.82225</code></pre>
+<pre class="r"><code>#SST (Total Sum of Squares): varianza total
+SST &lt;- sum( (df$AE - mean(df$AE)) ^ 2 )
+SST</code></pre>
+<pre><code>## [1] 89.4107</code></pre>
 </div>
 </div>
 <div id="calcular-la-fuerza-de-la-relacion-e-interpretar-el-resultado" class="section level3">

@@ -181,10 +181,37 @@ sFL <- shapiro.test(FL)
 sFM <- shapiro.test(FM)
 sFI <- shapiro.test(FI)
 
-
-
 alpha <- 0.05
 sNF <- shapiro.test(NF)
 sNF$p.value > alpha
 
 
+
+boxplot(df$AE~df$Tipo)
+bartlett.test(df$AE~df$Tipo)
+bart <- bartlett.test(df$AE~df$Tipo)
+bart$p.value
+
+library()
+levene.test(df$AE, df$Tipo)
+
+anova <- aov(df$AE~df$Tipo, df)
+sum(anova$residuals^2)
+anova$assign
+anova$
+summary(anova)
+summary(anova)[[1]][, 2]
+summary(anova)[[1]][, 'Sum Sq']
+result <- summary(anova)[[1]]$'Sum Sq'
+
+
+str(result)
+sapply(result, class)
+
+
+result[1]
+TukeyHSD(anova)
+anova$df.residual
+
+
+anova$

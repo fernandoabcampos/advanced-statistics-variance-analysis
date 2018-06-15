@@ -336,6 +336,7 @@ ANOVA unifactorial compara las medias entre los grupos que nos interesan y deter
 Podéis usar la función **aov.**
 ```{r}
 anova <- aov(df$AE~df$Tipo, df)
+anova
 summary(anova)
 TukeyHSD(anova)
 ```
@@ -351,13 +352,46 @@ Utilizamos también un TukeyHSD para realizar múltiples *pairwise-comparison* e
 ###4.4. Cálculos ANOVA
 ####4.4.1. Identificar las variables
 <p style="text-align: justify">
-A partir de los resultados del modelo devuelto por aov, identificar las variables SST (Total Sum of Squares), SSW (Within Sum of Squares), SSB (Between Sum of Squares) y los grados de libertad. A partir de estos valores, calcular manualmente el valor F, el valor crítico (a un nivel de confianza del 95%), y el valor p.Interpretar los resultados.
+A partir de los resultados del modelo devuelto por `aov`, identificar las variables SST (Total Sum of Squares), SSW (Within Sum of Squares), SSB (Between Sum of Squares) y los grados de libertad. A partir de estos valores, calcular manualmente el valor F, el valor crítico (a un nivel de confianza del 95%), y el valor p.Interpretar los resultados.
 </p>
+```{r}
+sumSq <- summary(anova)[[1]]$'Sum Sq'
+
+#Manera 1
+print(paste("SSW (Within Sum of Squares)",sumSq[2]))
+#Manera 2
+SSW.aov <- sum( anova$residuals ^ 2 )
+SSW.aov
+
+#Cálculo SST: varianza total (valor contiene todos los valores de x1-x5)
+#SST <- sum( (valor - mean(valor)) ^ 2 )
+
+#SSB: Varianza entre grupos
+#SSB <- SST - SSW
+#SST
+```
 
 ####4.4.2. Calcular manualmente las variables
 <p style="text-align: justify">
 Calcular manualmente SSB, SSW y SST a partir de los datos de la muestra. Comprobad que el cálculo coincide con los valores que devuelve la función anova. Las funciones summarize y group_by os pueden ser útiles para simplificar los cálculos.
 </p>
+```{r}
+varNF <- sum ((NF - mean(NF)) ^ 2 )
+varFP <- sum ((FP - mean(FP)) ^ 2 )
+varNI <- sum ((NI - mean(NI)) ^ 2 )
+varFL <- sum ((FL - mean(FL)) ^ 2 )
+varFM <- sum ((FM - mean(FM)) ^ 2 )
+varFI <- sum ((FI - mean(FI)) ^ 2 )
+
+#SSW (Within Sum of Squares): varianza intra grupo
+SSW <- varNF + varFP + varNI + varFL + varFM + varFI
+SSW
+
+#SST (Total Sum of Squares): varianza total
+SST <- sum( (df$AE - mean(df$AE)) ^ 2 )
+SST
+```
+
 
 ###4.5. Calcular la fuerza de la relación e interpretar el resultado
 Podéis consultar López-Roldán y Fachelli (2015), p.37.
