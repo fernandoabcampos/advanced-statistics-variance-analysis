@@ -273,7 +273,7 @@ test_and_define_if_normal(FI)
 
 ```
 <p style="text-align: justify">
-La justificativa de mí elección ha sido porque individualmente los conjuntos de datos son de menos de 30 ítems y, aún seguiendo a López-Roldán y Fachelli (2015) [3] si n≤30 se tiene que verificar con la prueba estadística de normalidad de *Shapiro-Wilk*.
+La justificativa de mí elección ha sido porque individualmente los conjuntos de datos son de menos de 30 ítems y, aún siguiendo a López-Roldán y Fachelli (2015) [3] si n≤30 se tiene que verificar con la prueba estadística de normalidad de *Shapiro-Wilk*.
 </p>
 <br />
 
@@ -300,8 +300,20 @@ Otra de las condiciones de aplicación de ANOVA es la igualdad de varianzas (hom
 <br />
 
 ####4.2.2. Realizar los cálculos
-####4.2.3. Interpretar los resultados
+<p style="text-align: justify">
+Conforme las recomendaciones de Dragonfly Statistics (2013) [4], **Bartlett test** puede ser usado para testar la homogeneidad de varianzas. Además, para soportar la decisión podemos utilizar boxplot para mirar si hay varianzas que són significativamente diferentes.
+</p>
+<br />
+```{r}
+boxplot(df$AE~df$Tipo)
+bart <- bartlett.test(df$AE~df$Tipo)
+bart
+```
 
+####4.2.3. Interpretar los resultados
+<p style="text-align: justify">
+Para el análisis e interpretación de los resultados, seguimos con las orientaciones de Dragonfly Statistics (2013) [4], primero, mirando los box plots, notamos que la formas / tamaños de las cajas son aproximadamente los mismos, dando un inidicio que tenemos un muestreo donde la varianza es homogénea. Nosotros rejectamos la hipótesis nula si p-valor fuera < `r alfa`, sin embargo, el resultado del **Bartlett test** nos enseña `r bart$p.value`  > `r alfa`. Por lo tanto, aceptamos la hipótesis nula.
+</p>
 
 ###4.3. ANOVA unifactorial (One Way ANOVA)
 Calcular ANOVA de un factor (one-way ANOVA o independent samples ANOVA) para investigar si existen diferencias en el nivel de aire expulsado (AE) entre los distintos tipos de fumadores.
@@ -361,4 +373,9 @@ http://www.dummies.com/education/math/statistics/how-to-calculate-a-confidence-i
 <p style="text-align: justify">
 [3] López-Roldán, P. y Fachelli, S. (2015) *"Metodología de la Investigación Social Cuantitativa"* 1ª edición, Barcelona: Universitat Autònoma de Barcelona. [artículo en línea]. [Fecha de consulta: 10 de junio del 2018].
 https://ddd.uab.cat/pub/caplli/2016/163568/metinvsoccua_cap3-8a2016.pdf
+</p>
+<br />
+<p style="text-align: justify">
+[4] Dragonfly Statistics (2015) *"R Tutorial : Bartlett Test"* [artículo en línea]. [Fecha de consulta: 12 de junio del 2018].
+https://www.youtube.com/watch?v=CMPn0eJ1zqs
 </p>
