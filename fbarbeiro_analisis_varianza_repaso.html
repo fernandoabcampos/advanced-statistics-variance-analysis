@@ -558,6 +558,20 @@ bart</code></pre>
 ## 
 ## data:  df$AE by df$Tipo
 ## Bartlett's K-squared = 6.0904, df = 5, p-value = 0.2975</code></pre>
+<pre class="r"><code># Probando tambien con Levene test
+library(lawstat)</code></pre>
+<pre><code>## Loading required package: Kendall</code></pre>
+<pre><code>## Loading required package: mvtnorm</code></pre>
+<pre><code>## Loading required package: VGAM</code></pre>
+<pre><code>## Loading required package: stats4</code></pre>
+<pre><code>## Loading required package: splines</code></pre>
+<pre class="r"><code>levene.test(df$AE, df$Tipo)</code></pre>
+<pre><code>## 
+##  modified robust Brown-Forsythe Levene-type test based on the
+##  absolute deviations from the median
+## 
+## data:  df$AE
+## Test Statistic = 0.99701, p-value = 0.4229</code></pre>
 </div>
 <div id="interpretar-los-resultados" class="section level4">
 <h4>4.2.3. Interpretar los resultados</h4>
@@ -571,13 +585,53 @@ Para el análisis e interpretación de los resultados, seguimos con las orientac
 <p>Calcular ANOVA de un factor (one-way ANOVA o independent samples ANOVA) para investigar si existen diferencias en el nivel de aire expulsado (AE) entre los distintos tipos de fumadores.</p>
 <div id="escribir-la-hipotesis-nula-y-alternativa-1" class="section level4">
 <h4>4.3.1. Escribir la hipótesis nula y alternativa</h4>
+<p style="text-align: justify">
+ANOVA unifactorial compara las medias entre los grupos que nos interesan y determina si alguna de esas medias es, en términos estadísticos, significativamente diferente entre sí. Específicamente, prueba la hipótesis nula:
+</p>
+<p><strong>H <em><sub>0</sub> : μ <sub>NF</sub> = μ <sub>FP</sub> = μ <sub>NI</sub> = μ <sub>FL</sub> = μ <sub>FM</sub> = μ <sub>FI</sub></em> </strong> <br /> <strong>H <em><sub>1</sub> : μ <sub> al menos 2 grupos son significativamente <span class="math inline">\(\neq\)</span> entre sí</em> </strong> <br /> <br /></p>
 </div>
 <div id="realizar-los-calculos-1" class="section level4">
 <h4>4.3.2. Realizar los cálculos</h4>
 <p>Podéis usar la función <strong>aov.</strong></p>
+<pre class="r"><code>anova &lt;- aov(df$AE~df$Tipo, df)
+summary(anova)</code></pre>
+<pre><code>##              Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## df$Tipo       5  38.59   7.718   17.16 1.33e-12 ***
+## Residuals   113  50.82   0.450                     
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+<pre class="r"><code>TukeyHSD(anova)</code></pre>
+<pre><code>##   Tukey multiple comparisons of means
+##     95% family-wise confidence level
+## 
+## Fit: aov(formula = df$AE ~ df$Tipo, data = df)
+## 
+## $`df$Tipo`
+##              diff         lwr        upr     p adj
+## FL-FI  0.31717895 -0.30570727  0.9400652 0.6799755
+## FM-FI  0.23127500 -0.38357364  0.8461236 0.8842366
+## FP-FI  0.66219000  0.04734136  1.2770386 0.0269550
+## NF-FI  1.78410526  1.16121904  2.4069915 0.0000000
+## NI-FI  0.74969048  0.14220556  1.3571754 0.0066297
+## FM-FL -0.08590395 -0.70879017  0.5369823 0.9986515
+## FP-FL  0.34501105 -0.27787517  0.9678973 0.5964475
+## NF-FL  1.46692632  0.83610492  2.0977477 0.0000000
+## NI-FL  0.43251153 -0.18310712  1.0481302 0.3283395
+## FP-FM  0.43091500 -0.18393364  1.0457636 0.3310706
+## NF-FM  1.55283026  0.92994404  2.1757165 0.0000000
+## NI-FM  0.51841548 -0.08906944  1.1259004 0.1406800
+## NF-FP  1.12191526  0.49902904  1.7448015 0.0000120
+## NI-FP  0.08750048 -0.51998444  0.6949854 0.9983381
+## NI-NF -1.03441479 -1.65003343 -0.4187961 0.0000527</code></pre>
 </div>
 <div id="interpretar-los-resultados-de-la-prueba-anova-y-relacionarlos-con-el-resultado-grafico-del-boxplot" class="section level4">
 <h4>4.3.3. Interpretar los resultados de la prueba ANOVA y relacionarlos con el resultado gráfico del boxplot</h4>
+<p style="text-align: justify">
+Como el <em>p-value</em> es menor que el nivel de significación α = 0.05, podemos concluir que hay diferencias significativas entre los grupos resaltados con “*&quot; en el <code>summary</code> del modelo.
+</p>
+<p style="text-align: justify">
+Utilizamos también un TukeyHSD para realizar múltiples <em>pairwise-comparison</em> entre las medias de los grupos y sumadas también al análisis anterior de los <em>box plots</em> podemos decir que se nota que hay <span class="math inline">\(\neq\)</span> significativas entre categorías como, por ejemplo, NF-FI (No fumantes y Fumantes intensos).
+</p>
 </div>
 </div>
 <div id="calculos-anova" class="section level3">

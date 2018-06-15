@@ -308,6 +308,10 @@ Conforme las recomendaciones de Dragonfly Statistics (2013) [4], **Bartlett test
 boxplot(df$AE~df$Tipo)
 bart <- bartlett.test(df$AE~df$Tipo)
 bart
+
+# Probando tambien con Levene test
+library(lawstat)
+levene.test(df$AE, df$Tipo)
 ```
 
 ####4.2.3. Interpretar los resultados
@@ -318,12 +322,31 @@ Para el análisis e interpretación de los resultados, seguimos con las orientac
 ###4.3. ANOVA unifactorial (One Way ANOVA)
 Calcular ANOVA de un factor (one-way ANOVA o independent samples ANOVA) para investigar si existen diferencias en el nivel de aire expulsado (AE) entre los distintos tipos de fumadores.
 
-
 ####4.3.1. Escribir la hipótesis nula y alternativa
+<p style="text-align: justify">
+ANOVA unifactorial compara las medias entre los grupos que nos interesan y determina si alguna de esas medias es, en términos estadísticos, significativamente diferente entre sí. Específicamente, prueba la hipótesis nula:
+</p>
+**H *<sub>0</sub> : &mu; <sub>NF</sub> = &mu; <sub>FP</sub> = &mu; <sub>NI</sub> = &mu; <sub>FL</sub> = &mu; <sub>FM</sub> = &mu; <sub>FI</sub>* **
+<br />
+**H *<sub>1</sub> : &mu; <sub> al menos 2 grupos son significativamente $\neq$ entre sí* **
+<br />
+<br />
+
 ####4.3.2. Realizar los cálculos
 Podéis usar la función **aov.**
+```{r}
+anova <- aov(df$AE~df$Tipo, df)
+summary(anova)
+TukeyHSD(anova)
+```
 
 ####4.3.3. Interpretar los resultados de la prueba ANOVA y relacionarlos con el resultado gráfico del boxplot
+<p style="text-align: justify">
+Como el *p-value* es menor que el nivel de significación &alpha; = `r alfa`, podemos concluir que hay diferencias significativas entre los grupos resaltados con "*" en el `summary` del modelo.
+</p>
+<p style="text-align: justify">
+Utilizamos también un TukeyHSD para realizar múltiples *pairwise-comparison* entre las medias de los grupos y sumadas también al análisis anterior de los *box plots* podemos decir que se nota que hay $\neq$ significativas entre categorías como, por ejemplo, NF-FI (No fumantes y Fumantes intensos).
+</p>
 
 ###4.4. Cálculos ANOVA
 ####4.4.1. Identificar las variables
