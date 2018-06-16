@@ -20,15 +20,15 @@ library(knitr)
 
 <hr />
 
-## 1. Preprocesado
-###1.1. Carga de datos
+# 1. Preprocesado
+##1.1. Carga de datos
 Cargar el fichero de datos “Fumadores.csv”.
 ```{r}
 df <- read.csv("data/Fumadores.csv")
 head(df)
 ```
 
-###1.2. Tipos de datos
+##1.2. Tipos de datos
 <p style="text-align: justify">Consultar los tipos de datos de las variables y si es necesario, aplicar las conversiones apropiadas. Averiguar posibles inconsistencias en los valores de Tipo o AE. En caso de que existan inconsitencias, corregidlas.
 </p>
 ```{r}
@@ -50,14 +50,14 @@ print(head(df$AE))
 str(df)
 ```
 
-###1.3. Realizar un análisis descriptivo de la muestra en su totalidad en relación a la variable AE
+##1.3. Realizar un análisis descriptivo de la muestra en su totalidad en relación a la variable AE
 Recordando que la estadística descriptiva se trata de resumir los datos de una muestra (en vez de extraer conclusiones).
 ```{r}
 kable(summary(df)[,1], # 1 posicion AE
       digits=2, align='l', caption="Estadística descriptiva de la variable AE", col.names = "AE")
 ```
 
-###1.4. Analizar los datos según el tipo de fumador
+##1.4. Analizar los datos según el tipo de fumador
 <p style="text-align: justify">
 Mostrar el número de personas en cada tipo de fumador, la media de AE de cada tipo de fumador y un gráfico que muestre esta media. Se recomienda ordenar el gráfico de menos a más AE.
 </p>
@@ -88,7 +88,7 @@ bp + ggtitle("Distribución Aire Expulsado AE por Tipo de Fumador")
 <br />Se nota la existencia de *outliers* en FI y FM.
 <hr />
 
-## 2. Intervalo de confianza
+# 2. Intervalo de confianza
 <p style="text-align: justify">
 Calcular el intervalo de confianza de la capacidad pulmonar de toda la muestra. El nivel de confianza es 95 %. Realizar el cálculo manualmente sin usar las funciones t.test o equivalentes. Podéis usar qnorm, qt, pnorm, pt, . . . En cuanto a la elección del método para el cálculo del intervalo de confianza, debéis justificar vuestra elección.
 </p>
@@ -118,11 +118,11 @@ Para calcular el intervalo de confianza he utilizado una formula según Rumsey (
 Con el uso de la formula de Rumsey (y también confirmado por `t.test`),  con 95% de confianza, la cantidad de aire expulsado (AE) está entre `r range_min` y `r range_max`, con base en el muestreo de datos.
 
 <hr />
-## 3. Comparación de dos muestras: Fumadores vs No Fumadores
+# 3. Comparación de dos muestras: Fumadores vs No Fumadores
 <p style="text-align: justify">
 ¿Podemos afirmar que la capacidad pulmonar de los fumadores es inferior a la de no fumadores? Incluid dentro de la categoría de no fumadores los fumadores pasivos. Realizar el cálculo manualmente sin usar las funciones `t.test` o equivalentes. Podéis usar `qnorm`, `qt`, `pnorm`, `pt` ... Seguid los pasos que se indican a continuación.
 </p>
-###3.1. Escribir la hipótesis nula y alternativa
+##3.1. Escribir la hipótesis nula y alternativa
 Al escribir la hipótesis nula y alternativa, si se trata de comprobar si la capacidad pulmonar de los fumadores es inferior a la de no fumadores se debe plantear así:<br />
 <br />
 **H *<sub>0</sub> : &mu; <sub>Capac. Fumadores</sub>* =  *&mu; <sub>Capac. No Fumadores</sub>* **
@@ -134,7 +134,7 @@ Al escribir la hipótesis nula y alternativa, si se trata de comprobar si la cap
 Es decir, se persigue rechazar la hipótesis nula. Al hacerlo, se hace a favor de la alternativa. H0 siempre es la hipótesis nula, y es la que se formula con la igualdad. (*Ester Bernadó Mansilla, orientaciones Tablero*)
 </p>
 
-###3.2. Preparar los datos para realizar el contraste
+##3.2. Preparar los datos para realizar el contraste
 Creando dos data frames que contengan por separado los no fumadores y por otra parte, los fumadores.
 ```{r}
 nrow(df)
@@ -156,14 +156,14 @@ s1
 s2
 ```
 
-###3.3. Especificar qué tipo de contraste usaréis
+##3.3. Especificar qué tipo de contraste usaréis
 *Podéis consultar Gibergans Baguena (2009).*
 
 <p style="text-align: justify">
 Se trata de un **contraste unilateral**, conforme indicado por Baguena (2009) [2], este tipo de contraste es un **contraste de dos muestras sobre la diferencia de medias**.
 <p style="text-align: justify">
 
-###3.4. Realizar los cálculos del valor p
+##3.4. Realizar los cálculos del valor p
 ```{r}
 mean1 <- mean( no_fumadores$AE )
 mean2 <- mean( fumadores$AE )
@@ -184,15 +184,15 @@ pvalue
 
 
 
-###3.5. Interpretar el resultado del contraste
+##3.5. Interpretar el resultado del contraste
 <p style="text-align: justify">
 Observando pvalue = `r pvalue` < &alpha;=`r alfa`, rechazamos la hipótesis nula *Capacidad Pulmonar Fumadores = Capacidad Pulmonar No Fumadores* a favor de la hipótesis alternativa.
 </p>
 
 A partir del valor crítico, también se llega a la misma observación, puesto que el valor observado `r zobs` > `r zcritical`.
 
-
-## 4. ANOVA
+<hr>
+# 4. ANOVA
 <p style="text-align: justify">
 A continuación se realizará un análisis de varianza, donde se desea comparar la capacidad pulmonar entre los seis tipos de fumadores/no fumadores clasificados previamente. El análisis de varianza consiste en evaluar si la variabilidad de una variable dependiente puede explicarse a partir de una o varias variables independientes, denominadas factores. En el caso que nos ocupa, nos interesa evaluar si la variabilidad de la variable AE puede explicarse por el factor tipo de fumador. Hay dos preguntas básicas a responder:
 </p>
@@ -204,12 +204,12 @@ A continuación se realizará un análisis de varianza, donde se desea comparar 
 Para la resolución de esta sección, se seguirán los apuntes de López-Roldán y Fachelli (2015).
 </p>
 
-###4.1. Verificar la asunción de normalidad
+##4.1. Verificar la asunción de normalidad
 <p style="text-align: justify">
 Atendiendo al material, gráfico III. 8.6 y página 25, evaluar si el conjunto de datos cumple las condiciones de aplicación de ANOVA. Seguid los pasos que se indican a continuación.
 </p>
 
-####4.1.1. Representar gráficamente la normalidad de la muestra de datos AE con la función qqnorm
+###4.1.1. Representar gráficamente la normalidad de la muestra de datos AE con la función qqnorm
 ```{r}
 NF <- df[df$Tipo == "NF", c("AE")]
 FP <- df[df$Tipo == "FP", c("AE")]
@@ -238,7 +238,7 @@ par( mfrow=c(1,1))
 
 ```
 
-####4.1.2. Escribir la hipótesis nula e hipótesis alternativa
+###4.1.2. Escribir la hipótesis nula e hipótesis alternativa
 
 <br />
 **H *<sub>0</sub> : La distribución es normal* **
@@ -250,7 +250,7 @@ par( mfrow=c(1,1))
 Según López-Roldán y Fachelli (2015) [3], para determinar la **condición de normalidad** se aplica una prueba estadística que la determina como la prueba de *Kolmogorov-Smirnov*, u otras como las de *Lilliefors*, *Anderson-Darling* o *Shapiro-Wilk*.
 </p>
 
-####4.1.3. Aplicar un test de normalidad
+###4.1.3. Aplicar un test de normalidad
 <p style="text-align: justify">
 *Aplicar un test de normalidad, siguiendo las recomendaciones del material mencionado López-Roldán y Fachelli (2015). Justificar la elección.*
 </p>
@@ -277,20 +277,20 @@ La justificativa de mí elección ha sido porque individualmente los conjuntos d
 </p>
 <br />
 
-####4.1.4. Interpretar los resultados a partir del gráfico qqnorm y de los valores que devuelve el test.
+###4.1.4. Interpretar los resultados a partir del gráfico qqnorm y de los valores que devuelve el test.
 <p style="text-align: justify">
 Tomando el valor de significación &alpha;= `r alfa` y su comparación con los valores de p-value de los resultados del apartado anterior, podríamos definir que se trata de muestreos de distribución normal. Lo mismo puede ser encontrado si miramos en los gráficos donde también se puede observar la tendencia de seguir la línea trazada por `qqline`.
 </p>
 <br />
 
-### 4.2. Homoscedasticidad: Homogeneidad de varianzas
+## 4.2. Homoscedasticidad: Homogeneidad de varianzas
 
 <p style="text-align: justify">
 Otra de las condiciones de aplicación de ANOVA es la igualdad de varianzas (homoscedasticidad). Aplicar un test para validar si los grupos presentan igual varianza. Seguid las indicaciones de los apuntes de López-Roldán y Fachelli (2015).
 </p>
 <br />
 
-####4.2.1. Escribir hipótesis nula y alternativa
+###4.2.1. Escribir hipótesis nula y alternativa
 
 <br />
 **H *<sub>0</sub> : Las varianzas poblacionales son iguales (homoscedasticidad) $\sigma_{1}^2$ = $\sigma_{2}^2$ * **
@@ -299,7 +299,7 @@ Otra de las condiciones de aplicación de ANOVA es la igualdad de varianzas (hom
 <br />
 <br />
 
-####4.2.2. Realizar los cálculos
+###4.2.2. Realizar los cálculos
 <p style="text-align: justify">
 Conforme las recomendaciones de Dragonfly Statistics (2013) [4], **Bartlett test** puede ser usado para testar la homogeneidad de varianzas. Además, para soportar la decisión podemos utilizar boxplot para mirar si hay varianzas que són significativamente diferentes.
 </p>
@@ -314,15 +314,15 @@ library(lawstat)
 levene.test(df$AE, df$Tipo)
 ```
 
-####4.2.3. Interpretar los resultados
+###4.2.3. Interpretar los resultados
 <p style="text-align: justify">
 Para el análisis e interpretación de los resultados, seguimos con las orientaciones de Dragonfly Statistics (2013) [4], primero, mirando los box plots, notamos que la formas / tamaños de las cajas son aproximadamente los mismos, dando un inidicio que tenemos un muestreo donde la varianza es homogénea. Nosotros rejectamos la hipótesis nula si p-valor fuera < `r alfa`, sin embargo, el resultado del **Bartlett test** nos enseña `r bart$p.value`  > `r alfa`. Por lo tanto, aceptamos la hipótesis nula.
 </p>
 
-###4.3. ANOVA unifactorial (One Way ANOVA)
+##4.3. ANOVA unifactorial (One Way ANOVA)
 Calcular ANOVA de un factor (one-way ANOVA o independent samples ANOVA) para investigar si existen diferencias en el nivel de aire expulsado (AE) entre los distintos tipos de fumadores.
 
-####4.3.1. Escribir la hipótesis nula y alternativa
+###4.3.1. Escribir la hipótesis nula y alternativa
 <p style="text-align: justify">
 ANOVA unifactorial compara las medias entre los grupos que nos interesan y determina si alguna de esas medias es, en términos estadísticos, significativamente diferente entre sí. Específicamente, prueba la hipótesis nula:
 </p>
@@ -332,7 +332,7 @@ ANOVA unifactorial compara las medias entre los grupos que nos interesan y deter
 <br />
 <br />
 
-####4.3.2. Realizar los cálculos
+###4.3.2. Realizar los cálculos
 Podéis usar la función **aov.**
 ```{r}
 anova <- aov(df$AE~df$Tipo, df)
@@ -341,7 +341,7 @@ summary(anova)
 TukeyHSD(anova)
 ```
 
-####4.3.3. Interpretar los resultados de la prueba ANOVA y relacionarlos con el resultado gráfico del boxplot
+###4.3.3. Interpretar los resultados de la prueba ANOVA y relacionarlos con el resultado gráfico del boxplot
 <p style="text-align: justify">
 Como el *p-value* es menor que el nivel de significación &alpha; = `r alfa`, podemos concluir que hay diferencias significativas entre los grupos resaltados con "*" en el `summary` del modelo.
 </p>
@@ -349,8 +349,8 @@ Como el *p-value* es menor que el nivel de significación &alpha; = `r alfa`, po
 Utilizamos también un TukeyHSD para realizar múltiples *pairwise-comparison* entre las medias de los grupos y sumadas también al análisis anterior de los *box plots* podemos decir que se nota que hay $\neq$ significativas entre categorías como, por ejemplo, NF-FI (No fumantes y Fumantes intensos).
 </p>
 
-###4.4. Cálculos ANOVA
-####4.4.1. Identificar las variables
+##4.4. Cálculos ANOVA
+###4.4.1. Identificar las variables
 <p style="text-align: justify">
 A partir de los resultados del modelo devuelto por `aov`, identificar las variables SST (Total Sum of Squares), SSW (Within Sum of Squares), SSB (Between Sum of Squares) y los grados de libertad. A partir de estos valores, calcular manualmente el valor F, el valor crítico (a un nivel de confianza del 95%), y el valor p.Interpretar los resultados.
 </p>
@@ -388,7 +388,7 @@ p_value[1]
 El anova unifactorial (Oneway ANOVA) ha enseñado un efecto significativo para categorías de fumadores con relación a capacidad pulmonar, F(`r grados_libertad[1]`, `r grados_libertad[2]`) = `r F`, p < `r alfa` -> `r p_value[1]`< `r alfa`. En otras palabras, podemos rejectar la hipótesis nula de que todos los tipos / categorías de fumadores tienen capacidad pulmonor igual.
 </p>
 
-####4.4.2. Calcular manualmente las variables
+###4.4.2. Calcular manualmente las variables
 <p style="text-align: justify">
 Calcular manualmente SSB, SSW y SST a partir de los datos de la muestra. Comprobad que el cálculo coincide con los valores que devuelve la función anova. Las funciones summarize y group_by os pueden ser útiles para simplificar los cálculos.
 </p>
@@ -424,7 +424,7 @@ kable(data.frame("Metodo de obtención" = c("Extraído del `aov()`", "Calculado 
 Conforme hemos visto en la comprobación, los resultados han coincidido.
 </p>
 
-###4.5. Calcular la fuerza de la relación e interpretar el resultado
+##4.5. Calcular la fuerza de la relación e interpretar el resultado
 Podéis consultar López-Roldán y Fachelli (2015), p.37.
 ```{r}
 library(lsr)
@@ -439,18 +439,18 @@ En nuestro muestreo se obtiene un valor del **`r etaS[1]`**.
 <br />
 <hr>
 
-## 5. Comparaciones múltiples
+# 5. Comparaciones múltiples
 <p style="text-align: justify">
 Independientemente del resultado obtenido en el apartado anterior, realizamos un test de comparación múltiple entre los grupos. Este test se aplica cuando el test ANOVA devuelve rechazar la hipótesis nula de igualdad de medias. Por tanto, procederemos como si el test ANOVA hubiera dado como resultado el rechazo de la hipótesis nula.
 </p>
 
-###5.1. Sin corrección
+##5.1. Sin corrección
 Calcular las comparaciones entre grupos sin ningún tipo de corrección. Podéis usar la función pairwise.t.test.
 ```{r}
 pairwise.t.test(df$AE, df$Tipo, p.adj = "none")
 ```
 
-###5.2. Corrección de Bonferroni
+##5.2. Corrección de Bonferroni
 Aplicar la corrección de Bonferroni en la comparación múltiple. Interpretar el resultado y contrastar el resultado con el obtenido sin corrección.
 ```{r}
 pairwise.t.test(df$AE, df$Tipo, p.adj = "bonferroni")
@@ -463,7 +463,7 @@ Usando el ajuste de **Bonferroni**, solo la comparación NF - \* y FI - {FP, NF 
 <p>
 
 
-###5.3. Prueba de Scheffé
+##5.3. Prueba de Scheffé
 <p style="text-align: justify">
 La prueba de Scheffé es una de las más usadas cuando se cumplen condiciones de igualdad de varianza. Según López, está basada en la distribución F. Permite la comparación binaria entre pares de medias y también la comparación múltiple. En las comparaciones de pares es conservadora. Se puede aplicar con muestras de tamaño desigual y es bastante robusta ante el incumplimiento de la condición de homoscedasticidad.
 </p>
@@ -480,21 +480,21 @@ En nuestro ejemplo: *'FI - NF'*, *'FI - NI'*, *'FL - NF'*, *'FM - NF'*, *'FP - N
 </p>
 <br />
 <hr>
-## 6. ANOVA multifactorial
+# 6. ANOVA multifactorial
 <p style="text-align: justify">
 En una segunda fase de la investigación se evaluó el efecto del sexo como variable independiente. Con este objetivo, se recolectó un segundo conjunto de datos con las variables independientes sexo y nivel de fumador y con la variable dependiente capacidad pulmonar medida según el aire expulsado, al igual que con el primer conjunto de datos. Este conjunto de datos se encuentra en el fichero `Fumadores2.csv`.
 </p>
 
-### 6.1. Estudiar los efectos principales y posibles interacciones
+## 6.1. Estudiar los efectos principales y posibles interacciones
 <p style="text-align: justify">
 Examinar las características del conjunto de datos y realizar un estudio visual de los datos. A continuación, aplicad ANOVA. Seguid los pasos que se indican a continuación.
 </p>
 
-####6.1.1. Análisis visual
+### 6.1.1. Análisis visual
 <p style="text-align: justify">
 Se realizará un primer estudio visual para determinar si sólo existen efectos principales o hay efectos de interacción entre sexo y tipo de fumador. Para ello, seguir los pasos que se indican a continuación:
 </p>
-#####1. 
+#### 1. 
 Leer el conjunto de datos
 ```{r}
 df2 <- read.csv("data/Fumadores2.csv")
@@ -514,7 +514,7 @@ unique(df2$Sex)
 ```
 
 
-#####2. 
+#### 2. 
 <p style="text-align: justify">
 Agrupar el conjunto de datos por tipo de fumador y sexo y calcular la media de AE en cada grupo. Podéis usar las instrucciones `group_by` y `summarise` de la librería `dplyr` para realizar este proceso. Mostrar el conjunto de datos en forma de tabla, donde se muestre la media de cada grupo según el sexo y tipo de fumador.
 </p>
@@ -531,7 +531,7 @@ kable(fum2)
 ```
 
 
-#####3. 
+#### 3. 
 <p style="text-align: justify">
 Mostrar en un plot el valor de AE medio para cada tipo de fumador y sexo. Podéis inspiraros en los gráficos de López-Roldán y Fachelli (2015), p.38. Podéis realizar este tipo de gráfico usando la función `ggplot` de la librería `ggplot2`.
 </p>
@@ -543,7 +543,7 @@ ggplot(data=fum2, aes(x=reorder(Tipo, AE), y=AE, group=Sex)) +
 ```
 
 
-#####4. 
+#### 4. 
 <p style="text-align: justify">
 Interpretar el resultado sobre si existen sólo efectos principales o existe interacción. Si existe interacción, explicar cómo se observa y qué efectos produce esta interacción.
 </p>
@@ -553,35 +553,45 @@ Para quedar 100% claro sobre los efectos con y sin interacción, voy a usar una 
 </p>
 ![Figura 1: Efectos con y sin interacción](imgs/1.png)
 <p style="text-align: justify">
-El diseño del problema que estamos trabajando es *con interacción* y notamos que esto se puede decir porque la diferencia entre los valores medios de `AE` cambian especialmente entre **FL**, **FM** y **FI** (diría que más en **FL**). En resumen, la combinación de `Tipo` + `Sexo` sí que influye en el resultado final.
+El diseño del problema que estamos trabajando es *con interacción* y notamos que esto se puede decir porque la diferencia entre los valores medios de `AE` cambian - aunque poco - especialmente entre **FL**, **FM** y **FI** (diría que más en **FL**). En resumen, la combinación de `Tipo` + `Sexo` sí que influye en el resultado final.
 </p>
 <br />
-####6.1.2. ANOVA multifactorial
+
+### 6.1.2. ANOVA multifactorial
 <p style="text-align: justify">
 Calcular ANOVA multifactorial para evaluar si la variable dependiente AE se puede explicar a partir de las variables independientes sexo y tipo de fumador. Incluid el efecto de la interacción sólo si se ha observado dicha interacción en el análisis visual del apartado anterior. Interpretad el resultado.
 </p>
-<hr>
-## Referencias
+```{r}
+anova2 <- aov(AE ~ Tipo + Sex, data = df2)
+summary(anova2)
+```
+
 <p style="text-align: justify">
-[1] Rumsey, D. (2016) *"How to calculate a confidence interval for a population mean when you know its standard deviation"*. [artículo en línea]. [Fecha de consulta: 06 de junio del 2018]. 
+De la tabla ANOVA podemos concluir que tanto `Tipo` como `Sex` son estadísticamente significativas. El `Tipo` es la variable de factor más significativa. Estos resultados nos llevarían a pensar que los cambios en los Tipos de fumadores (esto es, la persona que deja de ser un Fumador Intensivo para ser un NI - No Inhalan) es definitivamente el más significativo, sin embargo hay también que considerar que el sexo de la persona influye y afectará significativamente en la cantidad de Aire Expulsado / Capacidad Pulmonar.
+</p>
+
+<hr>
+# Referencias
+<p style="text-align: justify">
+[1] **Rumsey, D. (2016)** *"How to calculate a confidence interval for a population mean when you know its standard deviation"*. [artículo en línea]. [Fecha de consulta: 06 de junio del 2018]. 
 http://www.dummies.com/education/math/statistics/how-to-calculate-a-confidence-interval-for-a-population-mean-when-you-know-its-standard-deviation/
 </p>
 <br />
 <p style="text-align: justify">
-[2] Baguena, J. (2009) *“Contraste de Dos Muestras.”* In Estadística, edited by Josep Gibergans Baguena, Angel J. Gil Estallo, and Carles Rovira Escofet. Barcelona: FUOC.
+[2] **Baguena, J. (2009)** *“Contraste de Dos Muestras.”* In Estadística, edited by Josep Gibergans Baguena, Angel J. Gil Estallo, and Carles Rovira Escofet. Barcelona: FUOC.
 </p>
 <br />
 <p style="text-align: justify">
-[3] López-Roldán, P. y Fachelli, S. (2015) *"Metodología de la Investigación Social Cuantitativa"* 1ª edición, Barcelona: Universitat Autònoma de Barcelona. [artículo en línea]. [Fecha de consulta: 10 de junio del 2018].
+[3] **López-Roldán, P. y Fachelli, S. (2015)** *"Metodología de la Investigación Social Cuantitativa"* 1ª edición, Barcelona: Universitat Autònoma de Barcelona. [artículo en línea]. [Fecha de consulta: 10 de junio del 2018].
 https://ddd.uab.cat/pub/caplli/2016/163568/metinvsoccua_cap3-8a2016.pdf
 </p>
 <br />
 <p style="text-align: justify">
-[4] Dragonfly Statistics (2015) *"R Tutorial : Bartlett Test"* [artículo en línea]. [Fecha de consulta: 12 de junio del 2018].
+[4] **Dragonfly Statistics (2015)** *"R Tutorial : Bartlett Test"* [artículo en línea]. [Fecha de consulta: 12 de junio del 2018].
 https://www.youtube.com/watch?v=CMPn0eJ1zqs
 </p>
 <br />
 <p style="text-align: justify">
-[5] Quick, J. (2011) *"R Tutorial Series: ANOVA Pairwise Comparison Methods"* [artículo en línea]. [Fecha de consulta: 13 de junio del 2018].
+[5] **Quick, J. (2011)** *"R Tutorial Series: ANOVA Pairwise Comparison Methods"* [artículo en línea]. [Fecha de consulta: 13 de junio del 2018].
 https://www.r-bloggers.com/r-tutorial-series-anova-pairwise-comparison-methods/
 </p>
