@@ -426,6 +426,18 @@ Conforme hemos visto en la comprobación, los resultados han coincidido.
 
 ###4.5. Calcular la fuerza de la relación e interpretar el resultado
 Podéis consultar López-Roldán y Fachelli (2015), p.37.
+```{r}
+library(lsr)
+etaS <- etaSquared(anova)
+etaS
+summary.lm(anova)
+```
+<p style="text-align: justify">
+Como ha sido definido por López-Roldán y Fachelli (2015) [3], estos datos representán la variabilidad explicada sobre la variabilidad total. El valor obtenido queda entre 0 y 1 midiendo la parte explicada por la variable independiente. 
+</p>
+En nuestro muestreo se obtiene un valor del **`r etaS[1]`**.
+<br />
+<hr>
 
 ## 5. Comparaciones múltiples
 <p style="text-align: justify">
@@ -434,16 +446,44 @@ Independientemente del resultado obtenido en el apartado anterior, realizamos un
 
 ###5.1. Sin corrección
 Calcular las comparaciones entre grupos sin ningún tipo de corrección. Podéis usar la función pairwise.t.test.
+```{r}
+pairwise.t.test(df$AE, df$Tipo, p.adj = "none")
+```
 
 ###5.2. Corrección de Bonferroni
 Aplicar la corrección de Bonferroni en la comparación múltiple. Interpretar el resultado y contrastar el resultado con el obtenido sin corrección.
+```{r}
+pairwise.t.test(df$AE, df$Tipo, p.adj = "bonferroni")
+```
+<p style="text-align: justify">
+Tal como lo define Quick (2011) [5], el ajuste de **Bonferroni** simplemente divide la tasa del error de Tipo I (.05) por el número de pruebas (en este caso, seis). Por lo tanto, este método a menudo se considera demasiado conservador.
+</p>
+<p style="text-align: justify">
+Usando el ajuste de **Bonferroni**, solo la comparación NF - \* y FI - {FP, NF o NI} son estadísticamente significativas. Tenga en cuenta que estos resultados son más conservadores que sin ningún ajuste. Por ejemplo, **sin ajustes** la comparación NI - {FL o FM} también era considerada significativa.
+<p>
+
 
 ###5.3. Prueba de Scheffé
 <p style="text-align: justify">
 La prueba de Scheffé es una de las más usadas cuando se cumplen condiciones de igualdad de varianza. Según López, está basada en la distribución F. Permite la comparación binaria entre pares de medias y también la comparación múltiple. En las comparaciones de pares es conservadora. Se puede aplicar con muestras de tamaño desigual y es bastante robusta ante el incumplimiento de la condición de homoscedasticidad.
 </p>
 Aplicad la prueba de Scheffé e interpretar el resultado.
+```{r}
+library(agricolae)
+scheffe.test(anova,"df$Tipo", group=FALSE,console=TRUE, main="Capacidad Pulmonar de Fumadores y no fumadores")
+```
+<p style="text-align: justify">
+La segunda tabla de resultados proporciona la comparación por pares de las medias para todas las posibles combinaciones de grupos. La comparación debe hacerse en la columna 'Difference' de la segunda tabla con el 'Valor crítico de F', y los valores p se generan en función de eso. Simplemente verificamos la columna p-value, si es menor que `r alfa`, indica que la media para los dos grupos es diferente.
+</p>
+<p style="text-align: justify">
+En nuestro ejemplo: *'FI - NF'*, *'FI - NI'*, *'FL - NF'*, *'FM - NF'*, *'FP - NF'*, *'NF - NI'* tienen un valor de p < `r alfa, que dice que la media de los grupos definidos son significativamente diferentes.
+</p>
+<br />
+<hr>
 ## 6. ANOVA multifactorial
+<p style="text-align: justify">
+En una segunda fase de la investigación se evaluó el efecto del sexo como variable independiente. Con este objetivo, se recolectó un segundo conjunto de datos con las variables independientes sexo y nivel de fumador y con la variable dependiente capacidad pulmonar medida según el aire expulsado, al igual que con el primer conjunto de datos. Este conjunto de datos se encuentra en el fichero Fumadores2.csv
+</p>
 ## 7. Aplicación de ANOVA a la investigación en minería de datos
 
 
@@ -466,4 +506,9 @@ https://ddd.uab.cat/pub/caplli/2016/163568/metinvsoccua_cap3-8a2016.pdf
 <p style="text-align: justify">
 [4] Dragonfly Statistics (2015) *"R Tutorial : Bartlett Test"* [artículo en línea]. [Fecha de consulta: 12 de junio del 2018].
 https://www.youtube.com/watch?v=CMPn0eJ1zqs
+</p>
+<br />
+<p style="text-align: justify">
+[5] Quick, J. (2011) *"R Tutorial Series: ANOVA Pairwise Comparison Methods"* [artículo en línea]. [Fecha de consulta: 13 de junio del 2018].
+https://www.r-bloggers.com/r-tutorial-series-anova-pairwise-comparison-methods/
 </p>

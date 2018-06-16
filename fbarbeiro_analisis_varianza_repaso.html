@@ -156,6 +156,8 @@ Análisis de varianza y repaso del curso
 <li><a href="#correccion-de-bonferroni">5.2. Corrección de Bonferroni</a></li>
 <li><a href="#prueba-de-scheffe">5.3. Prueba de Scheffé</a></li>
 </ul></li>
+<li><a href="#anova-multifactorial">6. ANOVA multifactorial</a></li>
+<li><a href="#aplicacion-de-anova-a-la-investigacion-en-mineria-de-datos">7. Aplicación de ANOVA a la investigación en minería de datos</a></li>
 <li><a href="#referencias">Referencias</a></li>
 </ul>
 </div>
@@ -748,6 +750,39 @@ Conforme hemos visto en la comprobación, los resultados han coincidido.
 <div id="calcular-la-fuerza-de-la-relacion-e-interpretar-el-resultado" class="section level3">
 <h3>4.5. Calcular la fuerza de la relación e interpretar el resultado</h3>
 <p>Podéis consultar López-Roldán y Fachelli (2015), p.37.</p>
+<pre class="r"><code>library(lsr)
+etaS &lt;- etaSquared(anova)
+etaS</code></pre>
+<pre><code>##            eta.sq eta.sq.part
+## df$Tipo 0.4315865   0.4315865</code></pre>
+<pre class="r"><code>summary.lm(anova)</code></pre>
+<pre><code>## 
+## Call:
+## aov(formula = df$AE ~ df$Tipo, data = df)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -1.7360 -0.4516 -0.0187  0.4871  1.6038 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   2.4565     0.1500  16.381  &lt; 2e-16 ***
+## df$TipoFL     0.3172     0.2148   1.476 0.142643    
+## df$TipoFM     0.2313     0.2121   1.091 0.277796    
+## df$TipoFP     0.6622     0.2121   3.122 0.002278 ** 
+## df$TipoNF     1.7841     0.2148   8.304 2.45e-13 ***
+## df$TipoNI     0.7497     0.2095   3.578 0.000511 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.6706 on 113 degrees of freedom
+## Multiple R-squared:  0.4316, Adjusted R-squared:  0.4064 
+## F-statistic: 17.16 on 5 and 113 DF,  p-value: 1.332e-12</code></pre>
+<p style="text-align: justify">
+Como ha sido definido por López-Roldán y Fachelli (2015) [3], estos datos representán la variabilidad explicada sobre la variabilidad total. El valor obtenido queda entre 0 y 1 midiendo la parte explicada por la variable independiente.
+</p>
+En nuestro muestreo se obtiene un valor del <strong>0.4315865</strong>. <br />
+<hr>
 </div>
 </div>
 <div id="comparaciones-multiples" class="section level2">
@@ -758,19 +793,110 @@ Independientemente del resultado obtenido en el apartado anterior, realizamos un
 <div id="sin-correccion" class="section level3">
 <h3>5.1. Sin corrección</h3>
 <p>Calcular las comparaciones entre grupos sin ningún tipo de corrección. Podéis usar la función pairwise.t.test.</p>
+<pre class="r"><code>pairwise.t.test(df$AE, df$Tipo, p.adj = &quot;none&quot;)</code></pre>
+<pre><code>## 
+##  Pairwise comparisons using t tests with pooled SD 
+## 
+## data:  df$AE and df$Tipo 
+## 
+##    FI      FL      FM      FP      NF     
+## FL 0.14264 -       -       -       -      
+## FM 0.27780 0.69003 -       -       -      
+## FP 0.00228 0.11110 0.04451 -       -      
+## NF 2.5e-13 6.9e-10 6.2e-11 8.2e-07 -      
+## NI 0.00051 0.04400 0.01484 0.67704 3.6e-06
+## 
+## P value adjustment method: none</code></pre>
 </div>
 <div id="correccion-de-bonferroni" class="section level3">
 <h3>5.2. Corrección de Bonferroni</h3>
 <p>Aplicar la corrección de Bonferroni en la comparación múltiple. Interpretar el resultado y contrastar el resultado con el obtenido sin corrección.</p>
+<pre class="r"><code>pairwise.t.test(df$AE, df$Tipo, p.adj = &quot;bonferroni&quot;)</code></pre>
+<pre><code>## 
+##  Pairwise comparisons using t tests with pooled SD 
+## 
+## data:  df$AE and df$Tipo 
+## 
+##    FI      FL      FM      FP      NF     
+## FL 1.0000  -       -       -       -      
+## FM 1.0000  1.0000  -       -       -      
+## FP 0.0342  1.0000  0.6676  -       -      
+## NF 3.7e-12 1.0e-08 9.3e-10 1.2e-05 -      
+## NI 0.0077  0.6600  0.2226  1.0000  5.5e-05
+## 
+## P value adjustment method: bonferroni</code></pre>
+<p style="text-align: justify">
+Tal como lo define Quick (2011) [5], el ajuste de <strong>Bonferroni</strong> simplemente divide la tasa del error de Tipo I (.05) por el número de pruebas (en este caso, seis). Por lo tanto, este método a menudo se considera demasiado conservador.
+</p>
+<p style="text-align: justify">
+Usando el ajuste de <strong>Bonferroni</strong>, solo la comparación NF - * y FI - {FP, NF o NI} son estadísticamente significativas. Tenga en cuenta que estos resultados son más conservadores que sin ningún ajuste. Por ejemplo, <strong>sin ajustes</strong> la comparación NI - {FL o FM} también era considerada significativa.
+<p>
 </div>
 <div id="prueba-de-scheffe" class="section level3">
 <h3>5.3. Prueba de Scheffé</h3>
 <p style="text-align: justify">
 La prueba de Scheffé es una de las más usadas cuando se cumplen condiciones de igualdad de varianza. Según López, está basada en la distribución F. Permite la comparación binaria entre pares de medias y también la comparación múltiple. En las comparaciones de pares es conservadora. Se puede aplicar con muestras de tamaño desigual y es bastante robusta ante el incumplimiento de la condición de homoscedasticidad.
 </p>
-<p>Aplicad la prueba de Scheffé e interpretar el resultado. ## 6. ANOVA multifactorial ## 7. Aplicación de ANOVA a la investigación en minería de datos</p>
+<p>Aplicad la prueba de Scheffé e interpretar el resultado.</p>
+<pre class="r"><code>library(agricolae)
+scheffe.test(anova,&quot;df$Tipo&quot;, group=FALSE,console=TRUE, main=&quot;Capacidad Pulmonar de Fumadores y no fumadores&quot;)</code></pre>
+<pre><code>## 
+## Study: Capacidad Pulmonar de Fumadores y no fumadores
+## 
+## Scheffe Test for df$AE 
+## 
+## Mean Square Error  : 0.4497544 
+## 
+## df$Tipo,  means
+## 
+##       df.AE       std  r    Min    Max
+## FI 2.456500 0.5515356 20 1.5541 3.6645
+## FL 2.773679 0.7182298 19 1.0377 4.1173
+## FM 2.687775 0.6575152 20 1.0675 4.0868
+## FP 3.118690 0.7497423 20 1.7509 4.7225
+## NF 4.240605 0.8100596 19 2.5231 5.2844
+## NI 3.206190 0.5025607 21 2.4779 4.0616
+## 
+## Alpha: 0.05 ; DF Error: 113 
+## Critical Value of F: 2.29463 
+## 
+## Comparison between treatments means
+## 
+##          Difference pvalue sig        LCL        UCL
+## FI - FL -0.31717895 0.8227     -1.2013452  0.5669873
+## FI - FM -0.23127500 0.9450     -1.1040322  0.6414822
+## FI - FP -0.66219000 0.0916   . -1.5349472  0.2105672
+## FI - NF -1.78410526 0.0000 *** -2.6682715 -0.8999390
+## FI - NI -0.74969048 0.0311   * -1.6119951  0.1126141
+## FL - FM  0.08590395 0.9995     -0.7982623  0.9700702
+## FL - FP -0.34501105 0.7639     -1.2291773  0.5391552
+## FL - NF -1.46692632 0.0000 *** -2.3623563 -0.5714964
+## FL - NI -0.43251153 0.5311     -1.3063617  0.4413386
+## FM - FP -0.43091500 0.5339     -1.3036722  0.4418422
+## FM - NF -1.55283026 0.0000 *** -2.4369965 -0.6686640
+## FM - NI -0.51841548 0.3024     -1.3807201  0.3438891
+## FP - NF -1.12191526 0.0002 *** -2.0060815 -0.2377490
+## FP - NI -0.08750048 0.9993     -0.9498051  0.7748041
+## NF - NI  1.03441479 0.0006 ***  0.1605646  1.9082650</code></pre>
+<p style="text-align: justify">
+La segunda tabla de resultados proporciona la comparación por pares de las medias para todas las posibles combinaciones de grupos. La comparación debe hacerse en la columna ‘Difference’ de la segunda tabla con el ‘Valor crítico de F’, y los valores p se generan en función de eso. Simplemente verificamos la columna p-value, si es menor que 0.05, indica que la media para los dos grupos es diferente.
+</p>
+<p style="text-align: justify">
+En nuestro ejemplo: <em>‘FI - NF’</em>, <em>‘FI - NI’</em>, <em>‘FL - NF’</em>, <em>‘FM - NF’</em>, <em>‘FP - NF’</em>, <em>‘NF - NI’</em> tienen un valor de p &lt; `r alfa, que dice que la media de los grupos definidos son significativamente diferentes.
+</p>
+<br />
 <hr>
 </div>
+</div>
+<div id="anova-multifactorial" class="section level2">
+<h2>6. ANOVA multifactorial</h2>
+<p style="text-align: justify">
+En una segunda fase de la investigación se evaluó el efecto del sexo como variable independiente. Con este objetivo, se recolectó un segundo conjunto de datos con las variables independientes sexo y nivel de fumador y con la variable dependiente capacidad pulmonar medida según el aire expulsado, al igual que con el primer conjunto de datos. Este conjunto de datos se encuentra en el fichero Fumadores2.csv
+</p>
+</div>
+<div id="aplicacion-de-anova-a-la-investigacion-en-mineria-de-datos" class="section level2">
+<h2>7. Aplicación de ANOVA a la investigación en minería de datos</h2>
+<hr>
 </div>
 <div id="referencias" class="section level2">
 <h2>Referencias</h2>
@@ -788,6 +914,10 @@ La prueba de Scheffé es una de las más usadas cuando se cumplen condiciones de
 <br />
 <p style="text-align: justify">
 [4] Dragonfly Statistics (2015) <em>“R Tutorial : Bartlett Test”</em> [artículo en línea]. [Fecha de consulta: 12 de junio del 2018]. <a href="https://www.youtube.com/watch?v=CMPn0eJ1zqs" class="uri">https://www.youtube.com/watch?v=CMPn0eJ1zqs</a>
+</p>
+<br />
+<p style="text-align: justify">
+[5] Quick, J. (2011) <em>“R Tutorial Series: ANOVA Pairwise Comparison Methods”</em> [artículo en línea]. [Fecha de consulta: 13 de junio del 2018]. <a href="https://www.r-bloggers.com/r-tutorial-series-anova-pairwise-comparison-methods/" class="uri">https://www.r-bloggers.com/r-tutorial-series-anova-pairwise-comparison-methods/</a>
 </p>
 </div>
 
