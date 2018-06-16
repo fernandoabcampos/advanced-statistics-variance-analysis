@@ -123,7 +123,7 @@ $(document).ready(function () {
 Análisis de varianza y repaso del curso
 </h2></h1>
 <h4 class="author"><em>Fernando Antonio Barbeiro Campos - <a href="mailto:fbarbeiro@uoc.edu">fbarbeiro@uoc.edu</a></em></h4>
-<h4 class="date"><em>15 June, 2018
+<h4 class="date"><em>16 June, 2018
 <hr /></em></h4>
 
 </div>
@@ -655,18 +655,37 @@ A partir de los resultados del modelo devuelto por <code>aov</code>, identificar
 <pre class="r"><code>sumSq &lt;- summary(anova)[[1]]$'Sum Sq'
 
 #Manera 1
-print(paste(&quot;SSW (Within Sum of Squares)&quot;,sumSq[2]))</code></pre>
-<pre><code>## [1] &quot;SSW (Within Sum of Squares) 50.8222519546478&quot;</code></pre>
+print(paste(&quot;SSW (Within Sum of Squares):&quot;,sumSq[2]))</code></pre>
+<pre><code>## [1] &quot;SSW (Within Sum of Squares): 50.8222519546478&quot;</code></pre>
 <pre class="r"><code>#Manera 2
 SSW.aov &lt;- sum( anova$residuals ^ 2 )
 SSW.aov</code></pre>
 <pre><code>## [1] 50.82225</code></pre>
-<pre class="r"><code>#Cálculo SST: varianza total (valor contiene todos los valores de x1-x5)
-#SST &lt;- sum( (valor - mean(valor)) ^ 2 )
-
-#SSB: Varianza entre grupos
-#SSB &lt;- SST - SSW
-#SST</code></pre>
+<pre class="r"><code>SSB.aov &lt;- sumSq[1]
+print(paste(&quot;SSB (Between Sum of Squares):&quot;, SSB.aov))</code></pre>
+<pre><code>## [1] &quot;SSB (Between Sum of Squares): 38.5884504717387&quot;</code></pre>
+<pre class="r"><code>SST.aov &lt;- sum(sumSq)
+SST.aov</code></pre>
+<pre><code>## [1] 89.4107</code></pre>
+<pre class="r"><code>grados_libertad &lt;- summary(anova)[[1]]$'Df'
+grados_libertad</code></pre>
+<pre><code>## [1]   5 113</code></pre>
+<pre class="r"><code>k &lt;- 6  #grupos
+N &lt;-length( df$AE )
+N</code></pre>
+<pre><code>## [1] 119</code></pre>
+<pre class="r"><code>F &lt;- (SSB.aov / (k-1)) / (SSW.aov/ (N-k))
+F</code></pre>
+<pre><code>## [1] 17.15979</code></pre>
+<pre class="r"><code>valor_critico &lt;- qf(1 - alfa, grados_libertad[1], grados_libertad[2])
+valor_critico</code></pre>
+<pre><code>## [1] 2.29463</code></pre>
+<pre class="r"><code>p_value &lt;- summary(anova)[[1]][[&quot;Pr(&gt;F)&quot;]]
+p_value[1]</code></pre>
+<pre><code>## [1] 1.332457e-12</code></pre>
+<p style="text-align: justify">
+El anova unifactorial (Oneway ANOVA) ha enseñado un efecto significativo para categorías de fumadores con relación a capacidad pulmonar, F(5, 113) = 17.1597863, p &lt; 0.05 -&gt; 1.332456610^{-12}&lt; 0.05. En otras palabras, podemos rejectar la hipótesis nula de que todos los tipos / categorías de fumadores tienen capacidad pulmonor igual.
+</p>
 </div>
 <div id="calcular-manualmente-las-variables" class="section level4">
 <h4>4.4.2. Calcular manualmente las variables</h4>
@@ -688,6 +707,42 @@ SSW</code></pre>
 SST &lt;- sum( (df$AE - mean(df$AE)) ^ 2 )
 SST</code></pre>
 <pre><code>## [1] 89.4107</code></pre>
+<pre class="r"><code># SSB (Between Sum of Squares): Varianza entre grupos
+SSB &lt;- SST - SSW
+SSB</code></pre>
+<pre><code>## [1] 38.58845</code></pre>
+<pre class="r"><code>#Comparando los valores extraidos del anova con los calculados
+kable(data.frame(&quot;Metodo de obtención&quot; = c(&quot;Extraído del `aov()`&quot;, &quot;Calculado Manualmente&quot;)
+                 , &quot;SSW&quot; = c(format(round(SSW.aov, 2), nsmall = 2), format(round(SSW, 2), nsmall = 2))
+                 , &quot;SSB&quot; = c(format(round(SSB.aov, 2), nsmall = 2), format(round(SSB, 2), nsmall = 2))
+                 , &quot;SST&quot; = c(format(round(SST.aov, 2), nsmall = 2), format(round(SST, 2), nsmall = 2))))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Metodo.de.obtención</th>
+<th align="left">SSW</th>
+<th align="left">SSB</th>
+<th align="left">SST</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Extraído del <code>aov()</code></td>
+<td align="left">50.82</td>
+<td align="left">38.59</td>
+<td align="left">89.41</td>
+</tr>
+<tr class="even">
+<td align="left">Calculado Manualmente</td>
+<td align="left">50.82</td>
+<td align="left">38.59</td>
+<td align="left">89.41</td>
+</tr>
+</tbody>
+</table>
+<p style="text-align: justify">
+Conforme hemos visto en la comprobación, los resultados han coincidido.
+</p>
 </div>
 </div>
 <div id="calcular-la-fuerza-de-la-relacion-e-interpretar-el-resultado" class="section level3">

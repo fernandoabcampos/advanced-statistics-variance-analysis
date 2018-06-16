@@ -358,18 +358,35 @@ A partir de los resultados del modelo devuelto por `aov`, identificar las variab
 sumSq <- summary(anova)[[1]]$'Sum Sq'
 
 #Manera 1
-print(paste("SSW (Within Sum of Squares)",sumSq[2]))
+print(paste("SSW (Within Sum of Squares):",sumSq[2]))
 #Manera 2
 SSW.aov <- sum( anova$residuals ^ 2 )
 SSW.aov
 
-#Cálculo SST: varianza total (valor contiene todos los valores de x1-x5)
-#SST <- sum( (valor - mean(valor)) ^ 2 )
+SSB.aov <- sumSq[1]
+print(paste("SSB (Between Sum of Squares):", SSB.aov))
 
-#SSB: Varianza entre grupos
-#SSB <- SST - SSW
-#SST
+SST.aov <- sum(sumSq)
+SST.aov
+
+grados_libertad <- summary(anova)[[1]]$'Df'
+grados_libertad
+
+k <- 6  #grupos
+N <-length( df$AE )
+N
+F <- (SSB.aov / (k-1)) / (SSW.aov/ (N-k))
+F
+
+valor_critico <- qf(1 - alfa, grados_libertad[1], grados_libertad[2])
+valor_critico
+
+p_value <- summary(anova)[[1]][["Pr(>F)"]]
+p_value[1]
 ```
+<p style="text-align: justify">
+El anova unifactorial (Oneway ANOVA) ha enseñado un efecto significativo para categorías de fumadores con relación a capacidad pulmonar, F(`r grados_libertad[1]`, `r grados_libertad[2]`) = `r F`, p < `r alfa` -> `r p_value[1]`< `r alfa`. En otras palabras, podemos rejectar la hipótesis nula de que todos los tipos / categorías de fumadores tienen capacidad pulmonor igual.
+</p>
 
 ####4.4.2. Calcular manualmente las variables
 <p style="text-align: justify">
@@ -390,8 +407,22 @@ SSW
 #SST (Total Sum of Squares): varianza total
 SST <- sum( (df$AE - mean(df$AE)) ^ 2 )
 SST
+
+# SSB (Between Sum of Squares): Varianza entre grupos
+SSB <- SST - SSW
+SSB
+
+#Comparando los valores extraidos del anova con los calculados
+kable(data.frame("Metodo de obtención" = c("Extraído del `aov()`", "Calculado Manualmente")
+                 , "SSW" = c(format(round(SSW.aov, 2), nsmall = 2), format(round(SSW, 2), nsmall = 2))
+                 , "SSB" = c(format(round(SSB.aov, 2), nsmall = 2), format(round(SSB, 2), nsmall = 2))
+                 , "SST" = c(format(round(SST.aov, 2), nsmall = 2), format(round(SST, 2), nsmall = 2))))
 ```
 
+
+<p style="text-align: justify">
+Conforme hemos visto en la comprobación, los resultados han coincidido.
+</p>
 
 ###4.5. Calcular la fuerza de la relación e interpretar el resultado
 Podéis consultar López-Roldán y Fachelli (2015), p.37.
