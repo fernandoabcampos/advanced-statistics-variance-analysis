@@ -476,17 +476,77 @@ scheffe.test(anova,"df$Tipo", group=FALSE,console=TRUE, main="Capacidad Pulmonar
 La segunda tabla de resultados proporciona la comparación por pares de las medias para todas las posibles combinaciones de grupos. La comparación debe hacerse en la columna 'Difference' de la segunda tabla con el 'Valor crítico de F', y los valores p se generan en función de eso. Simplemente verificamos la columna p-value, si es menor que `r alfa`, indica que la media para los dos grupos es diferente.
 </p>
 <p style="text-align: justify">
-En nuestro ejemplo: *'FI - NF'*, *'FI - NI'*, *'FL - NF'*, *'FM - NF'*, *'FP - NF'*, *'NF - NI'* tienen un valor de p < `r alfa, que dice que la media de los grupos definidos son significativamente diferentes.
+En nuestro ejemplo: *'FI - NF'*, *'FI - NI'*, *'FL - NF'*, *'FM - NF'*, *'FP - NF'*, *'NF - NI'* tienen un valor de p < `r alfa`, que dice que la media de los grupos definidos son significativamente diferentes.
 </p>
 <br />
 <hr>
 ## 6. ANOVA multifactorial
 <p style="text-align: justify">
-En una segunda fase de la investigación se evaluó el efecto del sexo como variable independiente. Con este objetivo, se recolectó un segundo conjunto de datos con las variables independientes sexo y nivel de fumador y con la variable dependiente capacidad pulmonar medida según el aire expulsado, al igual que con el primer conjunto de datos. Este conjunto de datos se encuentra en el fichero Fumadores2.csv
+En una segunda fase de la investigación se evaluó el efecto del sexo como variable independiente. Con este objetivo, se recolectó un segundo conjunto de datos con las variables independientes sexo y nivel de fumador y con la variable dependiente capacidad pulmonar medida según el aire expulsado, al igual que con el primer conjunto de datos. Este conjunto de datos se encuentra en el fichero `Fumadores2.csv`.
 </p>
-## 7. Aplicación de ANOVA a la investigación en minería de datos
+
+### 6.1. Estudiar los efectos principales y posibles interacciones
+<p style="text-align: justify">
+Examinar las características del conjunto de datos y realizar un estudio visual de los datos. A continuación, aplicad ANOVA. Seguid los pasos que se indican a continuación.
+</p>
+
+####6.1.1. Análisis visual
+<p style="text-align: justify">
+Se realizará un primer estudio visual para determinar si sólo existen efectos principales o hay efectos de interacción entre sexo y tipo de fumador. Para ello, seguir los pasos que se indican a continuación:
+</p>
+#####1. 
+Leer el conjunto de datos
+```{r}
+df2 <- read.csv("data/Fumadores2.csv")
+head(df2)
+
+# Buscando por valores NA
+print(unlist(lapply(df2, function(x) any(is.na(x)))))
+
+# Reunindo los tipos de variables e imprimindo
+res2 <- sapply(df2, class)
+kable(data.frame(variables=names(res2),clase=as.vector(res2)))
+
+summary(df2)
+
+unique(df2$Tipo) 
+unique(df2$Sex) 
+```
 
 
+#####2. 
+<p style="text-align: justify">
+Agrupar el conjunto de datos por tipo de fumador y sexo y calcular la media de AE en cada grupo. Podéis usar las instrucciones `group_by` y `summarise` de la librería `dplyr` para realizar este proceso. Mostrar el conjunto de datos en forma de tabla, donde se muestre la media de cada grupo según el sexo y tipo de fumador.
+</p>
+```{r}
+library(magrittr)
+library(dplyr)
+attach(df2)
+fum2 <- df2 %>%
+  select(AE, Tipo, Sex) %>%
+  group_by(Tipo, Sex) %>%
+  summarise(AE = mean(AE))
+
+kable(fum2)
+```
+
+
+
+#####3. 
+<p style="text-align: justify">
+Mostrar en un plot el valor de AE medio para cada tipo de fumador y sexo. Podéis inspiraros en los gráficos de López-Roldán y Fachelli (2015), p.38. Podéis realizar este tipo de gráfico usando la función `ggplot` de la librería `ggplot2`.
+</p>
+
+#####4. 
+<p style="text-align: justify">
+Interpretar el resultado sobre si existen sólo efectos principales o existe interacción. Si existe interacción, explicar cómo se observa y qué efectos produce esta interacción.
+</p>
+
+
+####6.1.2. ANOVA multifactorial
+<p style="text-align: justify">
+Calcular ANOVA multifactorial para evaluar si la variable dependiente AE se puede explicar a partir de las variables independientes sexo y tipo de fumador. Incluid el efecto de la interacción sólo si se ha observado dicha interacción en el análisis visual del apartado anterior. Interpretad el resultado.
+</p>
 <hr>
 ## Referencias
 <p style="text-align: justify">

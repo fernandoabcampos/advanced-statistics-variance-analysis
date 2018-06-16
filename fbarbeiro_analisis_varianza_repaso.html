@@ -156,8 +156,9 @@ Análisis de varianza y repaso del curso
 <li><a href="#correccion-de-bonferroni">5.2. Corrección de Bonferroni</a></li>
 <li><a href="#prueba-de-scheffe">5.3. Prueba de Scheffé</a></li>
 </ul></li>
-<li><a href="#anova-multifactorial">6. ANOVA multifactorial</a></li>
-<li><a href="#aplicacion-de-anova-a-la-investigacion-en-mineria-de-datos">7. Aplicación de ANOVA a la investigación en minería de datos</a></li>
+<li><a href="#anova-multifactorial">6. ANOVA multifactorial</a><ul>
+<li><a href="#estudiar-los-efectos-principales-y-posibles-interacciones">6.1. Estudiar los efectos principales y posibles interacciones</a></li>
+</ul></li>
 <li><a href="#referencias">Referencias</a></li>
 </ul>
 </div>
@@ -882,7 +883,7 @@ scheffe.test(anova,&quot;df$Tipo&quot;, group=FALSE,console=TRUE, main=&quot;Cap
 La segunda tabla de resultados proporciona la comparación por pares de las medias para todas las posibles combinaciones de grupos. La comparación debe hacerse en la columna ‘Difference’ de la segunda tabla con el ‘Valor crítico de F’, y los valores p se generan en función de eso. Simplemente verificamos la columna p-value, si es menor que 0.05, indica que la media para los dos grupos es diferente.
 </p>
 <p style="text-align: justify">
-En nuestro ejemplo: <em>‘FI - NF’</em>, <em>‘FI - NI’</em>, <em>‘FL - NF’</em>, <em>‘FM - NF’</em>, <em>‘FP - NF’</em>, <em>‘NF - NI’</em> tienen un valor de p &lt; `r alfa, que dice que la media de los grupos definidos son significativamente diferentes.
+En nuestro ejemplo: <em>‘FI - NF’</em>, <em>‘FI - NI’</em>, <em>‘FL - NF’</em>, <em>‘FM - NF’</em>, <em>‘FP - NF’</em>, <em>‘NF - NI’</em> tienen un valor de p &lt; 0.05, que dice que la media de los grupos definidos son significativamente diferentes.
 </p>
 <br />
 <hr>
@@ -891,12 +892,189 @@ En nuestro ejemplo: <em>‘FI - NF’</em>, <em>‘FI - NI’</em>, <em>‘FL - 
 <div id="anova-multifactorial" class="section level2">
 <h2>6. ANOVA multifactorial</h2>
 <p style="text-align: justify">
-En una segunda fase de la investigación se evaluó el efecto del sexo como variable independiente. Con este objetivo, se recolectó un segundo conjunto de datos con las variables independientes sexo y nivel de fumador y con la variable dependiente capacidad pulmonar medida según el aire expulsado, al igual que con el primer conjunto de datos. Este conjunto de datos se encuentra en el fichero Fumadores2.csv
+En una segunda fase de la investigación se evaluó el efecto del sexo como variable independiente. Con este objetivo, se recolectó un segundo conjunto de datos con las variables independientes sexo y nivel de fumador y con la variable dependiente capacidad pulmonar medida según el aire expulsado, al igual que con el primer conjunto de datos. Este conjunto de datos se encuentra en el fichero <code>Fumadores2.csv</code>.
+</p>
+<div id="estudiar-los-efectos-principales-y-posibles-interacciones" class="section level3">
+<h3>6.1. Estudiar los efectos principales y posibles interacciones</h3>
+<p style="text-align: justify">
+Examinar las características del conjunto de datos y realizar un estudio visual de los datos. A continuación, aplicad ANOVA. Seguid los pasos que se indican a continuación.
+</p>
+<div id="analisis-visual" class="section level4">
+<h4>6.1.1. Análisis visual</h4>
+<p style="text-align: justify">
+Se realizará un primer estudio visual para determinar si sólo existen efectos principales o hay efectos de interacción entre sexo y tipo de fumador. Para ello, seguir los pasos que se indican a continuación:
+</p>
+<div id="section" class="section level5">
+<h5>1.</h5>
+<p>Leer el conjunto de datos</p>
+<pre class="r"><code>df2 &lt;- read.csv(&quot;data/Fumadores2.csv&quot;)
+head(df2)</code></pre>
+<pre><code>##         AE Tipo Sex
+## 1 3.607107   NF   M
+## 2 3.708264   NF   M
+## 3 3.824298   NF   M
+## 4 3.355296   NF   M
+## 5 3.921486   NF   M
+## 6 3.195607   NF   M</code></pre>
+<pre class="r"><code># Buscando por valores NA
+print(unlist(lapply(df2, function(x) any(is.na(x)))))</code></pre>
+<pre><code>##    AE  Tipo   Sex 
+## FALSE FALSE FALSE</code></pre>
+<pre class="r"><code># Reunindo los tipos de variables e imprimindo
+res2 &lt;- sapply(df2, class)
+kable(data.frame(variables=names(res2),clase=as.vector(res2)))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">variables</th>
+<th align="left">clase</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">AE</td>
+<td align="left">numeric</td>
+</tr>
+<tr class="even">
+<td align="left">Tipo</td>
+<td align="left">factor</td>
+</tr>
+<tr class="odd">
+<td align="left">Sex</td>
+<td align="left">factor</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>summary(df2)</code></pre>
+<pre><code>##        AE         Tipo     Sex    
+##  Min.   :0.5306   FI: 54   F:252  
+##  1st Qu.:2.6642   FL: 62   M:250  
+##  Median :3.2370   FM: 46          
+##  Mean   :3.1329   FP:100          
+##  3rd Qu.:3.6826   NF:100          
+##  Max.   :5.3123   NI:140</code></pre>
+<pre class="r"><code>unique(df2$Tipo) </code></pre>
+<pre><code>## [1] NF FP NI FL FM FI
+## Levels: FI FL FM FP NF NI</code></pre>
+<pre class="r"><code>unique(df2$Sex) </code></pre>
+<pre><code>## [1] M F
+## Levels: F M</code></pre>
+</div>
+<div id="section-1" class="section level5">
+<h5>2.</h5>
+<p style="text-align: justify">
+Agrupar el conjunto de datos por tipo de fumador y sexo y calcular la media de AE en cada grupo. Podéis usar las instrucciones <code>group_by</code> y <code>summarise</code> de la librería <code>dplyr</code> para realizar este proceso. Mostrar el conjunto de datos en forma de tabla, donde se muestre la media de cada grupo según el sexo y tipo de fumador.
+</p>
+<pre class="r"><code>library(magrittr)
+library(dplyr)</code></pre>
+<pre><code>## 
+## Attaching package: 'dplyr'</code></pre>
+<pre><code>## The following objects are masked from 'package:stats':
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>attach(df2)
+fum2 &lt;- df2 %&gt;%
+  select(AE, Tipo, Sex) %&gt;%
+  group_by(Tipo, Sex) %&gt;%
+  summarise(AE = mean(AE))
+
+kable(fum2)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Tipo</th>
+<th align="left">Sex</th>
+<th align="right">AE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">FI</td>
+<td align="left">F</td>
+<td align="right">2.153394</td>
+</tr>
+<tr class="even">
+<td align="left">FI</td>
+<td align="left">M</td>
+<td align="right">2.486166</td>
+</tr>
+<tr class="odd">
+<td align="left">FL</td>
+<td align="left">F</td>
+<td align="right">2.743544</td>
+</tr>
+<tr class="even">
+<td align="left">FL</td>
+<td align="left">M</td>
+<td align="right">3.037663</td>
+</tr>
+<tr class="odd">
+<td align="left">FM</td>
+<td align="left">F</td>
+<td align="right">2.282694</td>
+</tr>
+<tr class="even">
+<td align="left">FM</td>
+<td align="left">M</td>
+<td align="right">2.574741</td>
+</tr>
+<tr class="odd">
+<td align="left">FP</td>
+<td align="left">F</td>
+<td align="right">3.301332</td>
+</tr>
+<tr class="even">
+<td align="left">FP</td>
+<td align="left">M</td>
+<td align="right">3.406332</td>
+</tr>
+<tr class="odd">
+<td align="left">NF</td>
+<td align="left">F</td>
+<td align="right">3.641762</td>
+</tr>
+<tr class="even">
+<td align="left">NF</td>
+<td align="left">M</td>
+<td align="right">3.748391</td>
+</tr>
+<tr class="odd">
+<td align="left">NI</td>
+<td align="left">F</td>
+<td align="right">3.163780</td>
+</tr>
+<tr class="even">
+<td align="left">NI</td>
+<td align="left">M</td>
+<td align="right">3.292063</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="section-2" class="section level5">
+<h5>3.</h5>
+<p style="text-align: justify">
+Mostrar en un plot el valor de AE medio para cada tipo de fumador y sexo. Podéis inspiraros en los gráficos de López-Roldán y Fachelli (2015), p.38. Podéis realizar este tipo de gráfico usando la función <code>ggplot</code> de la librería <code>ggplot2</code>.
 </p>
 </div>
-<div id="aplicacion-de-anova-a-la-investigacion-en-mineria-de-datos" class="section level2">
-<h2>7. Aplicación de ANOVA a la investigación en minería de datos</h2>
+<div id="section-3" class="section level5">
+<h5>4.</h5>
+<p style="text-align: justify">
+Interpretar el resultado sobre si existen sólo efectos principales o existe interacción. Si existe interacción, explicar cómo se observa y qué efectos produce esta interacción.
+</p>
+</div>
+</div>
+<div id="anova-multifactorial-1" class="section level4">
+<h4>6.1.2. ANOVA multifactorial</h4>
+<p style="text-align: justify">
+Calcular ANOVA multifactorial para evaluar si la variable dependiente AE se puede explicar a partir de las variables independientes sexo y tipo de fumador. Incluid el efecto de la interacción sólo si se ha observado dicha interacción en el análisis visual del apartado anterior. Interpretad el resultado.
+</p>
 <hr>
+</div>
+</div>
 </div>
 <div id="referencias" class="section level2">
 <h2>Referencias</h2>
