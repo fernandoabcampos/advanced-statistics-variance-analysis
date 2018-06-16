@@ -531,18 +531,31 @@ kable(fum2)
 ```
 
 
-
 #####3. 
 <p style="text-align: justify">
 Mostrar en un plot el valor de AE medio para cada tipo de fumador y sexo. Podéis inspiraros en los gráficos de López-Roldán y Fachelli (2015), p.38. Podéis realizar este tipo de gráfico usando la función `ggplot` de la librería `ggplot2`.
 </p>
+```{r}
+ggplot(data=fum2, aes(x=reorder(Tipo, AE), y=AE, group=Sex)) +
+  geom_line(aes(color=Sex))+
+  geom_point(aes(color=Sex))+
+  labs(title="Capacidad Pulmonar por Tipo de Fumador y Sexo")
+```
+
 
 #####4. 
 <p style="text-align: justify">
 Interpretar el resultado sobre si existen sólo efectos principales o existe interacción. Si existe interacción, explicar cómo se observa y qué efectos produce esta interacción.
 </p>
-
-
+</br>
+<p style="text-align: justify">
+Para quedar 100% claro sobre los efectos con y sin interacción, voy a usar una imagen bastante interesante de López-Roldán y Fachelli (2015).
+</p>
+![Figura 1: Efectos con y sin interacción](imgs/1.png)
+<p style="text-align: justify">
+El diseño del problema que estamos trabajando es *con interacción* y notamos que esto se puede decir porque la diferencia entre los valores medios de `AE` cambian especialmente entre **FL**, **FM** y **FI** (diría que más en **FL**). En resumen, la combinación de `Tipo` + `Sexo` sí que influye en el resultado final.
+</p>
+<br />
 ####6.1.2. ANOVA multifactorial
 <p style="text-align: justify">
 Calcular ANOVA multifactorial para evaluar si la variable dependiente AE se puede explicar a partir de las variables independientes sexo y tipo de fumador. Incluid el efecto de la interacción sólo si se ha observado dicha interacción en el análisis visual del apartado anterior. Interpretad el resultado.
